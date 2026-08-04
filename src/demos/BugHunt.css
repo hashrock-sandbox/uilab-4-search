@@ -1,0 +1,254 @@
+.hunt-stage {
+  position: relative;
+  height: 172px;
+  padding: 0 4px;
+  box-sizing: border-box;
+}
+
+/* 地面 */
+.hunt-stage::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: 26px;
+  border-bottom: 1px dashed rgba(80, 170, 90, 0.5);
+}
+
+/* --- 検索フィールド。虫眼鏡ぶんの余白を左に開けておく --- */
+
+.hunt-field-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.hunt-field {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  transition: border-color 0.15s ease;
+}
+
+.hunt-field:focus-within {
+  border-color: var(--accent-border);
+}
+
+.hunt-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 13px 16px 13px 48px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-h);
+  font: inherit;
+  font-size: 16px;
+}
+
+/* --- 虫眼鏡くん --- */
+
+.hunt-lens {
+  position: absolute;
+  z-index: 2;
+  left: 2px;
+  top: 4px;
+  transition:
+    left 1.1s ease-in-out,
+    top 0.5s ease-in-out;
+}
+
+/* フィールドから降りて地面に立つ */
+.hunt-lens.on-ground {
+  top: 87px;
+}
+
+/* 茂みの手前まで歩く */
+.hunt-lens.at-bush {
+  left: calc(100% - 100px);
+}
+
+/* フィールドの中では小さく収まっている。原点はレンズの中心 */
+.hunt-lens-scale {
+  transform: scale(0.42);
+  transform-origin: 28px 21px;
+  transition: transform 0.5s ease-out;
+}
+
+.hunt-lens.is-big .hunt-lens-scale {
+  transform: scale(1);
+}
+
+.hunt-lens.is-hidden {
+  opacity: 0.35;
+}
+
+.hunt-lens-body {
+  transform-origin: bottom center;
+}
+
+.hunt-lens.is-walking .hunt-lens-body {
+  animation: hunt-hop 0.34s ease-in-out infinite;
+}
+
+@keyframes hunt-hop {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(2deg);
+  }
+}
+
+/* 足 */
+.hunt-leg {
+  transform-box: fill-box;
+  transform-origin: top center;
+}
+
+.hunt-lens.is-walking .hunt-leg-l {
+  animation: hunt-leg 0.34s ease-in-out infinite;
+}
+
+.hunt-lens.is-walking .hunt-leg-r {
+  animation: hunt-leg 0.34s ease-in-out infinite reverse;
+}
+
+@keyframes hunt-leg {
+  0%,
+  100% {
+    transform: rotate(-20deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+}
+
+/* 持ち帰った虫 */
+.hunt-carry {
+  position: absolute;
+  right: -16px;
+  top: -4px;
+  font-size: 20px;
+  animation: hunt-pop 0.3s ease-out;
+}
+
+/* --- 茂み --- */
+
+.hunt-bush {
+  position: absolute;
+  right: 10px;
+  bottom: 14px;
+  font-size: 46px;
+  line-height: 1;
+  transform-origin: bottom center;
+  user-select: none;
+}
+
+.hunt-bush.is-shaking {
+  animation: hunt-shake 0.16s linear infinite;
+}
+
+@keyframes hunt-shake {
+  0%,
+  100% {
+    transform: rotate(-5deg) scale(1.02);
+  }
+  50% {
+    transform: rotate(5deg) scale(0.98);
+  }
+}
+
+.hunt-rustle {
+  position: absolute;
+  right: 66px;
+  bottom: 88px;
+  font-size: 12px;
+  animation: hunt-float 1s ease-out infinite;
+}
+
+@keyframes hunt-float {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  40% {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+/* --- 標本箱 --- */
+
+.hunt-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  aspect-ratio: 1;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--code-bg);
+  overflow: hidden;
+  animation: hunt-pop 0.34s cubic-bezier(0.2, 1.5, 0.4, 1);
+}
+
+@keyframes hunt-pop {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.hunt-cell.rarity-5 {
+  border-color: #f5b800;
+  background: linear-gradient(160deg, rgba(245, 184, 0, 0.3), rgba(245, 184, 0, 0.06));
+  box-shadow: 0 0 18px rgba(245, 184, 0, 0.45);
+}
+
+.hunt-cell.rarity-4 {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+}
+
+.hunt-cell.rarity-3 {
+  border-color: rgba(59, 130, 246, 0.45);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.hunt-cell.rarity-2 {
+  border-color: rgba(80, 170, 90, 0.45);
+  background: rgba(80, 170, 90, 0.1);
+}
+
+.hunt-button {
+  flex: none;
+  padding: 12px 22px;
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.hunt-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

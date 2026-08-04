@@ -1,0 +1,89 @@
+.gacha-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--code-bg);
+  overflow: hidden;
+  animation: gacha-pop 0.36s cubic-bezier(0.2, 1.5, 0.4, 1) backwards;
+}
+
+@keyframes gacha-pop {
+  from {
+    transform: scale(0.5) rotate(-8deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+
+.gacha-card.is-ssr {
+  border-color: #f5b800;
+  background: linear-gradient(160deg, rgba(245, 184, 0, 0.28), rgba(245, 184, 0, 0.06));
+  box-shadow: 0 0 22px rgba(245, 184, 0, 0.45);
+}
+
+.gacha-card.is-sr {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+}
+
+.gacha-card.is-r {
+  border-color: rgba(59, 130, 246, 0.45);
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* SSR だけ斜めに光が走る */
+.gacha-card.is-ssr::after {
+  content: '';
+  position: absolute;
+  inset: -60% -120%;
+  background: linear-gradient(
+    75deg,
+    transparent 42%,
+    rgba(255, 255, 255, 0.85) 50%,
+    transparent 58%
+  );
+  animation: gacha-shine 1.4s ease-out 0.3s;
+}
+
+@keyframes gacha-shine {
+  from {
+    transform: translateX(-60%);
+  }
+  to {
+    transform: translateX(60%);
+  }
+}
+
+.gacha-button {
+  padding: 12px 22px;
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.1s ease-out;
+}
+
+.gacha-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.gacha-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.gacha-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

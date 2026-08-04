@@ -1,0 +1,99 @@
+.sweaty-wrap {
+  position: relative;
+  border-radius: 12px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  box-shadow: var(--shadow);
+  transition:
+    border-color 0.4s ease,
+    background 0.6s ease,
+    filter 0.5s ease,
+    transform 0.5s ease;
+}
+
+/* 負荷が上がると小刻みに震える。振幅は --amp で流し込む */
+.sweaty-wrap.is-trembling {
+  animation: sweaty-tremble 0.09s linear infinite;
+}
+
+@keyframes sweaty-tremble {
+  0% {
+    transform: translate(calc(var(--amp) * -1), 0);
+  }
+  25% {
+    transform: translate(0, var(--amp));
+  }
+  50% {
+    transform: translate(var(--amp), 0);
+  }
+  75% {
+    transform: translate(0, calc(var(--amp) * -1));
+  }
+  100% {
+    transform: translate(calc(var(--amp) * -1), 0);
+  }
+}
+
+/* 気絶。ぐったり傾いて色を失う */
+.sweaty-wrap.is-fainted {
+  animation: none;
+  transform: rotate(2.5deg) translateY(10px);
+  filter: grayscale(1);
+  opacity: 0.55;
+}
+
+.sweaty-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-h);
+  font: inherit;
+  font-size: 17px;
+}
+
+.sweaty-drop {
+  position: absolute;
+  top: 6px;
+  width: 6px;
+  height: 8px;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(120, 190, 255, 0.35), rgba(90, 160, 235, 0.85));
+  border-radius: 50% 50% 45% 45% / 62% 62% 38% 38%;
+  animation: sweaty-fall linear forwards;
+}
+
+@keyframes sweaty-fall {
+  0% {
+    transform: translateY(0) scaleY(0.7);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.95;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(var(--dist)) scaleY(1.5);
+    opacity: 0;
+  }
+}
+
+.sweaty-meter {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--code-bg);
+  overflow: hidden;
+}
+
+.sweaty-meter > div {
+  height: 100%;
+  border-radius: 999px;
+  transition:
+    width 0.25s ease-out,
+    background 0.4s ease;
+}
