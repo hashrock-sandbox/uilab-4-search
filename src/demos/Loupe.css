@@ -1,0 +1,261 @@
+.loupe {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* 検索ボックスの縦位置を固定(結果の増減で動かない) */
+  padding: 14vh 0 80px;
+}
+
+/* ---- search box ---- */
+
+.loupe .search-wrap {
+  position: relative;
+  width: 640px;
+  height: 240px;
+}
+
+.loupe .frame-layer,
+.loupe .lens-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.loupe .frame-layer {
+  z-index: 1;
+}
+
+.loupe .lens-layer {
+  z-index: 2;
+}
+
+.loupe .frame-line {
+  fill: var(--bg);
+  stroke: var(--text-h);
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+}
+
+.loupe .frame-glow {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 7;
+  opacity: 0;
+  filter: blur(7px);
+}
+
+.loupe .search-input {
+  position: absolute;
+  z-index: 1;
+  left: 96px;
+  top: 88px;
+  width: 396px;
+  height: 64px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: 400 22px var(--sans);
+  letter-spacing: 0;
+  color: var(--text-h);
+  caret-color: var(--accent);
+  transition: color 0.25s;
+}
+
+.loupe .search-input::placeholder {
+  color: var(--text);
+}
+
+.loupe .mode-searching .search-input {
+  cursor: default;
+  color: transparent;
+}
+
+.loupe .stream-text {
+  font: 11px var(--sans);
+  fill: var(--text);
+  white-space: pre;
+}
+
+/* ---- lens ---- */
+
+.loupe .lens-flat circle,
+.loupe .lens-flat line {
+  stroke: var(--text-h);
+}
+
+.loupe .lens-shadow {
+  fill: #000;
+  filter: blur(3px);
+}
+
+.loupe .mag-bg {
+  fill: var(--bg);
+}
+
+.loupe .mag-text {
+  font: 400 22px var(--sans);
+  letter-spacing: 0;
+  fill: var(--text-h);
+  dominant-baseline: central;
+  white-space: pre;
+}
+
+.loupe .mag-text.placeholder {
+  fill: var(--text);
+}
+
+.loupe .mag-text.chroma-r {
+  fill: #ff2a2a;
+  opacity: 0.4;
+}
+
+.loupe .mag-text.chroma-b {
+  fill: #2a52ff;
+  opacity: 0.4;
+}
+
+.loupe .lens-hit {
+  position: absolute;
+  left: 501px;
+  top: 84.5px;
+  z-index: 3;
+  width: 66px;
+  height: 66px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+}
+
+.loupe .lens-hit:disabled {
+  cursor: default;
+}
+
+/* ---- results ---- */
+
+.loupe .results {
+  width: 520px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.loupe .hit-pills {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 166px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 0; /* 検索ボックスの背後 */
+}
+
+.loupe .hit-pills.consumed {
+  visibility: hidden;
+}
+
+.loupe .hit-pill {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--text);
+  animation: loupe-pill-drop 0.5s cubic-bezier(0.22, 0.7, 0.25, 1) backwards;
+}
+
+/* 検索ボックスの裏から滑り降りてくる */
+@keyframes loupe-pill-drop {
+  from {
+    transform: translateY(-44px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.loupe .filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  /* 結果カードのモーフが落ち着いた頃、ワンテンポ遅れてふわっと */
+  animation: loupe-soft-in 0.55s ease-out 1.5s backwards;
+}
+
+.loupe .chip {
+  font: 500 12.5px var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.loupe .chip:hover {
+  color: var(--text-h);
+}
+
+.loupe .chip.active {
+  color: var(--bg);
+  background: var(--text-h);
+  border-color: var(--text-h);
+}
+
+@keyframes loupe-soft-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+.loupe .result-card {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 14px 18px;
+  text-align: left;
+}
+
+.loupe .result-card h2 {
+  margin: 4px 0 4px;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+}
+
+.loupe .result-card p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.loupe .result-tag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loupe .hit-pill,
+  .loupe .filter-bar {
+    animation: none;
+  }
+}

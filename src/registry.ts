@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 import { BugHunt } from './demos/BugHunt'
 import { GachaSearch } from './demos/GachaSearch'
+import { Loupe } from './demos/Loupe'
 import { PlainSearch } from './demos/PlainSearch'
 import { RunawaySearch } from './demos/RunawaySearch'
 import { SweatyField } from './demos/SweatyField'
@@ -21,6 +22,12 @@ export const demos: Demo[] = [
     title: '普通の検索フィールド',
     summary: '虫眼鏡アイコン付きのまっとうな検索。すべての大喜利の基準線',
     Component: PlainSearch,
+  },
+  {
+    id: 'loupe',
+    title: 'ルーペ検索',
+    summary: 'アイコンが本物のルーペに化けて文字の上を走査する。ヒットがpillで溜まり結果へモーフ',
+    Component: Loupe,
   },
   {
     id: 'runaway',
