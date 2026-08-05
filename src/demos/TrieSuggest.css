@@ -1,0 +1,131 @@
+.trie-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  font: 400 16px var(--mono);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text-h);
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.trie-input:focus {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+/* ---- 絞り込み前の暗闇 ---- */
+
+.trie-dark {
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 22px 20px;
+  background: var(--code-bg);
+  min-height: 80px;
+}
+
+/* ---- 木 ---- */
+
+.trie-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.trie-svg {
+  display: block;
+  margin: 0 auto;
+  animation: trie-emerge 0.45s ease-out;
+}
+
+@keyframes trie-emerge {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    filter: none;
+  }
+}
+
+.trie-svg text {
+  font: 15px var(--mono);
+  fill: var(--text-h);
+  user-select: none;
+}
+
+.trie-node.is-root text {
+  fill: var(--accent);
+  font-weight: 600;
+}
+
+.trie-node.clickable {
+  cursor: pointer;
+}
+
+.trie-node.clickable:hover text {
+  fill: var(--accent);
+}
+
+/* 畳まれた枝の件数バッジ */
+.trie-fold {
+  font: 11px var(--mono);
+  fill: var(--text);
+  opacity: 0.75;
+}
+
+.trie-node.clickable:hover .trie-fold {
+  fill: var(--accent);
+  opacity: 1;
+}
+
+.trie-edge {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 1.4;
+}
+
+.trie-end {
+  fill: var(--accent-bg);
+  stroke: var(--accent);
+  stroke-width: 1.2;
+}
+
+/* ---- 走査カーソル ---- */
+
+.trie-cursor {
+  transition: transform 0.22s cubic-bezier(0.3, 0.8, 0.3, 1);
+  pointer-events: none;
+}
+
+.trie-cursor circle {
+  fill: var(--accent-bg);
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  animation: trie-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes trie-pulse {
+  0%,
+  100% {
+    r: 5;
+  }
+  50% {
+    r: 7.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trie-svg,
+  .trie-cursor,
+  .trie-cursor circle {
+    transition: none;
+    animation: none;
+  }
+}

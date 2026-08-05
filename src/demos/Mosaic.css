@@ -1,0 +1,190 @@
+/* ---- canvas モザイク ---- */
+
+.mosaic-canvas {
+  display: block;
+  font-family: var(--sans);
+}
+
+.mosaic-row .mosaic-canvas,
+.mosaic-drop-row .mosaic-canvas {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* ---- 入力欄と覆い ---- */
+
+.mosaic-field {
+  position: relative;
+}
+
+.mosaic-box {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.mosaic-box:focus-within {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.mosaic-inputwrap {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+}
+
+.mosaic-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 4px 12px 14px;
+  font: 400 17px var(--sans);
+  letter-spacing: normal;
+  border: none;
+  background: transparent;
+  color: var(--text-h);
+  outline: none;
+}
+
+.mosaic-input.is-covered {
+  color: transparent;
+  caret-color: var(--accent);
+}
+
+.mosaic-overlay {
+  position: absolute;
+  inset: 0;
+  padding-left: 14px;
+  display: flex;
+  align-items: center;
+  pointer-events: none;
+  color: var(--text-h);
+  overflow: hidden;
+}
+
+/* 押している間だけ見える目玉 */
+.mosaic-peek {
+  flex: none;
+  font-size: 16px;
+  line-height: 1;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-right: 4px;
+  cursor: pointer;
+  opacity: 0.45;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  transition: opacity 0.15s;
+}
+
+.mosaic-peek:hover {
+  opacity: 0.8;
+}
+
+.mosaic-peek.is-on {
+  opacity: 1;
+}
+
+/* ---- フォーカス時の履歴ドロップダウン ---- */
+
+.mosaic-drop {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+}
+
+.mosaic-drop-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 7px;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+}
+
+.mosaic-drop-row:hover {
+  background: var(--code-bg);
+}
+
+.mosaic-drop-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px 4px;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
+.mosaic-wipe {
+  font: 500 11px var(--sans);
+  color: var(--text);
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.mosaic-wipe:hover {
+  color: #e5484d;
+}
+
+/* ---- モード切替 ---- */
+
+.mosaic-mode {
+  font: 500 12.5px var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 5px 14px;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.mosaic-mode:hover {
+  color: var(--text-h);
+}
+
+.mosaic-mode.is-active {
+  color: var(--accent);
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+}
+
+/* ---- 結果の行 ---- */
+
+.mosaic-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.mosaic-row:hover {
+  background: var(--code-bg);
+}

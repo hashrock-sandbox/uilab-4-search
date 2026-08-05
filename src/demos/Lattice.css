@@ -1,0 +1,199 @@
+.lat-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 14px;
+  font: 400 16px var(--sans);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text-h);
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.lat-input:focus {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.lat-ex {
+  font: 400 12.5px var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 12px;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.lat-ex:hover {
+  color: var(--text-h);
+}
+
+.lat-ex.is-active {
+  color: var(--accent);
+  background: var(--accent-bg);
+  border-color: var(--accent-border);
+}
+
+/* ---- 変換結果 ---- */
+
+.lat-result {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 14px 2px;
+  min-height: 32px;
+}
+
+.lat-seg {
+  font-size: 20px;
+  color: var(--text-h);
+  border-bottom: 2px solid var(--accent);
+  padding: 0 2px 1px;
+}
+
+.lat-seg.is-unk {
+  border-bottom-style: dotted;
+  opacity: 0.7;
+}
+
+.lat-total {
+  font: 400 12px var(--mono);
+  color: var(--text-h);
+  background: var(--code-bg);
+  border-radius: 5px;
+  padding: 2px 8px;
+}
+
+.lat-extra {
+  font: 400 12px var(--mono);
+  color: #e5484d;
+}
+
+/* ---- ラティス ---- */
+
+.lat-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.lat-svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.lat-kana {
+  font: 600 15px var(--sans);
+  fill: var(--text-h);
+}
+
+.lat-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+  opacity: 0.45;
+  stroke-dasharray: 2 4;
+}
+
+.lat-bos {
+  fill: var(--code-bg);
+  stroke: var(--text);
+  stroke-width: 1.4;
+}
+
+/* ---- ノード ---- */
+
+.lat-node {
+  cursor: pointer;
+}
+
+.lat-node rect {
+  fill: var(--bg);
+  stroke: var(--border);
+  stroke-width: 1.3;
+  transition:
+    fill 0.18s,
+    stroke 0.18s;
+}
+
+.lat-node:hover rect {
+  stroke: var(--accent-border);
+}
+
+.lat-node.is-unk rect {
+  stroke-dasharray: 3 3;
+}
+
+.lat-node.is-on rect {
+  fill: var(--accent-bg);
+  stroke: var(--accent);
+  stroke-width: 1.8;
+}
+
+.lat-node.is-forced rect {
+  stroke-width: 2.6;
+}
+
+.lat-surface {
+  font: 14px var(--sans);
+  fill: var(--text);
+  transition: fill 0.18s;
+  user-select: none;
+}
+
+.lat-node.is-on .lat-surface {
+  fill: var(--text-h);
+  font-weight: 600;
+}
+
+.lat-node.is-unk .lat-surface {
+  opacity: 0.6;
+}
+
+.lat-cost {
+  font: 9px var(--mono);
+  fill: var(--text);
+  opacity: 0.65;
+  user-select: none;
+}
+
+/* ---- エッジ ---- */
+
+.lat-edge {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 1;
+  opacity: 0.1;
+  transition:
+    opacity 0.18s,
+    stroke 0.18s;
+}
+
+.lat-edge.is-on {
+  stroke: var(--accent);
+  stroke-width: 2.4;
+  opacity: 1;
+  stroke-dasharray: 7 5;
+  animation: lat-flow 0.7s linear infinite;
+}
+
+@keyframes lat-flow {
+  to {
+    stroke-dashoffset: -12;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lat-edge.is-on {
+    animation: none;
+    stroke-dasharray: none;
+  }
+}

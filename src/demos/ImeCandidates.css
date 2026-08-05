@@ -1,0 +1,160 @@
+.imec-field {
+  position: relative;
+}
+
+.imec-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  font: 400 17px var(--sans);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text-h);
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.imec-input:focus {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+/* 未確定文字列っぽい下線 */
+.imec-input.is-converting {
+  text-decoration: underline dotted;
+  text-underline-offset: 4px;
+}
+
+/* ---- 変換候補ウィンドウ ---- */
+
+.imec-window {
+  position: absolute;
+  top: calc(100% + 4px);
+  z-index: 20;
+  min-width: 200px;
+  max-width: 320px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  font-size: 15px;
+}
+
+.imec-list {
+  list-style: none;
+  margin: 0;
+  padding: 3px;
+}
+
+.imec-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 4px 10px 4px 6px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  font: 400 15px var(--sans);
+  color: var(--text-h);
+  cursor: pointer;
+  text-align: left;
+}
+
+.imec-row.is-sel {
+  background: var(--accent);
+  color: #fff;
+}
+
+.imec-num {
+  flex: none;
+  width: 14px;
+  font: 400 11px var(--mono);
+  opacity: 0.55;
+  text-align: right;
+}
+
+.imec-row.is-sel .imec-num {
+  opacity: 0.8;
+}
+
+.imec-cand {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Tab で開く候補一覧(テーブルビュー) */
+.imec-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(90px, 1fr));
+  gap: 2px;
+  padding: 3px;
+}
+
+.imec-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px 4px 4px;
+  border: none;
+  border-radius: 4px;
+  background: none;
+  font: 400 14px var(--sans);
+  color: var(--text-h);
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.imec-cell.is-sel {
+  background: var(--accent);
+  color: #fff;
+}
+
+.imec-empty {
+  padding: 8px 12px;
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+/* ステータスバー(選択中候補の注釈 + ページ表示) */
+.imec-status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px;
+  border-top: 1px solid var(--border);
+  background: var(--code-bg);
+}
+
+.imec-anno {
+  font-size: 11px;
+  opacity: 0.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.imec-counter {
+  flex: none;
+  font: 400 11px var(--mono);
+  opacity: 0.6;
+}
+
+.imec-brand {
+  padding: 2px 10px 4px;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  opacity: 0.35;
+  text-align: right;
+  background: var(--code-bg);
+}

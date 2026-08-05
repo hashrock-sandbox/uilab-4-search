@@ -1,10 +1,15 @@
 import type { ComponentType } from 'react'
 import { BugHunt } from './demos/BugHunt'
 import { GachaSearch } from './demos/GachaSearch'
+import { ImeCandidates } from './demos/ImeCandidates'
+import { Lattice } from './demos/Lattice'
 import { Loupe } from './demos/Loupe'
+import { Mosaic } from './demos/Mosaic'
 import { PlainSearch } from './demos/PlainSearch'
 import { RunawaySearch } from './demos/RunawaySearch'
 import { SweatyField } from './demos/SweatyField'
+import { TrieSuggest } from './demos/TrieSuggest'
+import { UfoSearch } from './demos/UfoSearch'
 
 export type Demo = {
   /** URL の /:id になる */
@@ -46,6 +51,36 @@ export const demos: Demo[] = [
     title: '汗をかく検索窓',
     summary: '重いクエリを書くと発汗し、震え、限界を超えると気絶する',
     Component: SweatyField,
+  },
+  {
+    id: 'mosaic',
+    title: 'モザイク検索',
+    summary: 'クエリも履歴もcanvasで本当にピクセル化。危険ワードだけ隠すモードも',
+    Component: Mosaic,
+  },
+  {
+    id: 'ufo',
+    title: 'キャトルミューティレーション検索',
+    summary: '英単語1万語を検索するとUFOが出動。ヒット規模に応じて牛と人間が吸われる(演出)',
+    Component: UfoSearch,
+  },
+  {
+    id: 'trie',
+    title: 'ツリー走査サジェスト',
+    summary: '英単語1万語のパトリシア木。絞り込めた枝だけが暗闇から姿を現す',
+    Component: TrieSuggest,
+  },
+  {
+    id: 'ime',
+    title: '変換候補ウィンドウ検索',
+    summary: '検索結果がIMEの変換候補として出てくる。スペースで次候補、確定した瞬間それは検索になる',
+    Component: ImeCandidates,
+  },
+  {
+    id: 'lattice',
+    title: '変換ラティス可視化',
+    summary: 'かな漢字変換の中身は最短経路探索。ラティスをビタビが走り、ノードをクリックすると経路が捻じ曲がる',
+    Component: Lattice,
   },
   {
     id: 'growing',
