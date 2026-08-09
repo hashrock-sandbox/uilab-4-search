@@ -1,3 +1,5 @@
+import { dishes } from './dishes'
+
 export type Item = {
   id: number
   name: string
@@ -5,8 +7,8 @@ export type Item = {
   tags: string[]
 }
 
-/** どのネタでも使い回す検索対象。適当に和食まわりで揃えてある。 */
-export const items: Item[] = [
+/** 手書きの基本セット。タグが練ってあるので優先して使う。 */
+const baseItems: Item[] = [
   { id: 1, name: 'ラーメン', kind: '麺', tags: ['あつい', 'しょっぱい', '夜'] },
   { id: 2, name: 'つけ麺', kind: '麺', tags: ['しょっぱい', '濃い'] },
   { id: 3, name: 'そば', kind: '麺', tags: ['さっぱり', 'つめたい'] },
@@ -39,6 +41,15 @@ export const items: Item[] = [
   { id: 30, name: 'ぬか漬け', kind: 'つけもの', tags: ['すっぱい', '発酵'] },
   { id: 31, name: 'キムチ', kind: 'つけもの', tags: ['からい', '発酵'] },
   { id: 32, name: '納豆', kind: 'つけもの', tags: ['発酵', 'ねばねば'] },
+]
+
+/** Wikidata 産の料理 1,400 件超を合流。手書きセットと同名のものは手書きを優先 */
+const baseNames = new Set(baseItems.map((item) => item.name))
+
+/** どのネタでも使い回す検索対象 */
+export const items: Item[] = [
+  ...baseItems,
+  ...dishes.filter((dish) => !baseNames.has(dish.name)),
 ]
 
 /** 素朴な部分一致検索。ネタ側で使い回す。 */
