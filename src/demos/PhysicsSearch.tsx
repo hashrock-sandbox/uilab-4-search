@@ -115,10 +115,7 @@ export function PhysicsSearch() {
   return (
     <div style={styles.page}>
       <h2 style={styles.heading}>物理演算検索</h2>
-      <p style={styles.lead}>
-        結果が降ってきて積まれます。関連度＝質量。よく一致する重い一品ほど速く落ちて下に沈み、
-        かすっただけの軽いものは上でぽよんと跳ねます。
-      </p>
+      <p style={styles.lead}>関連度＝質量。重い一品ほど速く沈み、軽いものは上で跳ねます。</p>
 
       <div style={styles.field}>
         <input

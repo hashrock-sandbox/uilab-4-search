@@ -72,10 +72,7 @@ export function WaitSearch() {
   return (
     <div style={styles.page}>
       <h2 style={styles.heading}>待つ検索</h2>
-      <p style={styles.lead}>
-        検索しません。窓もボタンもありません。ただ、じっと待ちます。
-        待っているうちに、探し物のほうから、ひとつ、またひとつと、こちらへ歩いてきます。
-      </p>
+      <p style={styles.lead}>検索しません。ただ待つと、探し物のほうから歩いてきます。</p>
 
       <button
         type="button"

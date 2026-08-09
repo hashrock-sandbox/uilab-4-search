@@ -130,8 +130,7 @@ export function SentoSearch() {
     <div style={styles.page}>
       <h2 style={styles.heading}>検索の銭湯</h2>
       <p style={styles.lead}>
-        他人のクエリがゆるく流れてくる公衆検索場。湯船に浮かぶ桶を拾えば、その人の検索に相乗りできます。
-        自分で打ったクエリも湯に放たれ、他の客に混ざって流れていきます。
+        他人のクエリが流れてくる公衆検索場。桶を拾うと相乗りでき、自分のクエリも湯に放たれます。
       </p>
 
       <div className="sento-noren" aria-hidden="true">

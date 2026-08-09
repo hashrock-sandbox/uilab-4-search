@@ -124,11 +124,7 @@ export function BinaryTournament() {
   return (
     <div style={styles.page}>
       <h2 style={styles.heading}>二択トーナメント</h2>
-      <p style={styles.lead}>
-        検索窓はありません。出てきた2つから「食べたい方」を選ぶだけ。
-        勝ち上がり戦で最後に残った1つが、あなたの検索結果です。
-        大喜利のはずが、意外とちゃんと欲しいものに辿り着きます。
-      </p>
+      <p style={styles.lead}>2択で勝ち上がった1つが検索結果になります。</p>
 
       {!champion && left && right && (
         <>

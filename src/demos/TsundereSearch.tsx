@@ -114,9 +114,8 @@ export function TsundereSearch() {
     <div style={styles.page}>
       <h2 style={styles.heading}>逆ギレ検索</h2>
       <p style={styles.lead}>
-        候補が何件あっても、まず<strong style={{ color: 'var(--text-h)' }}>1件だけ</strong>を
-        絶対の自信で断言してきます。「違う」と言うたびに不機嫌になり、しぶしぶ次を出します。
-        最初の一撃で「これ！」を押せば、機嫌が直る……かも。
+        まず<strong style={{ color: 'var(--text-h)' }}>1件だけ</strong>を断言。
+        「違う」と言うたびに不機嫌になります。
       </p>
 
       <form onSubmit={onSubmit} className="tsun-field">

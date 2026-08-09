@@ -150,10 +150,7 @@ export function Mosaic() {
 
   return (
     <div style={styles.page}>
-      <p style={styles.lead}>
-        検索クエリはプライベート情報なので、canvas に描画してから本当にピクセル化します。
-        履歴は入力欄フォーカスで出てきますが、もちろん読めません。
-      </p>
+      <p style={styles.lead}>検索クエリを canvas で本当にピクセル化します。履歴も同様に隠れます。</p>
 
       <div style={styles.modes}>
         {MODES.map((m) => (

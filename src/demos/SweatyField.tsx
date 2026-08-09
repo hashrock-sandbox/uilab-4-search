@@ -118,9 +118,7 @@ export function SweatyField() {
 
   return (
     <div style={styles.page}>
-      <p style={styles.lead}>
-        重いクエリを書くと検索窓が汗をかきます。無理をさせると気絶します。
-      </p>
+      <p style={styles.lead}>重いクエリを書くと窓が汗をかき、無理をさせると気絶します。</p>
 
       <div style={styles.status}>
         <span style={{ color: stage.color }}>

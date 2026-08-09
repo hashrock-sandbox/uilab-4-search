@@ -96,8 +96,7 @@ export function TasteAxes() {
     <div style={styles.page}>
       <h2 style={styles.heading}>味覚の3軸</h2>
       <p style={styles.lead}>
-        文字は打たない。<strong style={styles.em}>甘い / 辛い / すっぱい</strong>{' '}
-        の3本のつまみだけで食べ物を探す検索。今の口が求める味の座標に、いちばん近い一皿から並びます。
+        文字は打たない。<strong style={styles.em}>甘い / 辛い / すっぱい</strong>の3軸だけで探します。
       </p>
 
       {/* 目標プロファイルの三角レーダー */}

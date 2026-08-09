@@ -179,9 +179,7 @@ export function ShoutSearch() {
     <div style={styles.page}>
       <h2 style={styles.heading}>叫ぶ検索</h2>
       <p style={styles.lead}>
-        声の大きさで検索範囲が決まる。ヒソヒソ声なら<strong>完全一致</strong>、
-        叫べば叫ぶほど範囲が広がってヒットが増える。
-        マイクが使えないときは下の「声の大きさ」スライダーで代用できます。
+        声の大きさで検索範囲が決まる。ヒソヒソ声なら<strong>完全一致</strong>、叫ぶほど範囲が広がる。
       </p>
 
       <label htmlFor="shout-search" className="shout-sr-only">

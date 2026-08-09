@@ -64,10 +64,7 @@ export function PlainSearch() {
   return (
     <div style={styles.page}>
       <h2 style={styles.heading}>普通の検索フィールド</h2>
-      <p style={styles.lead}>
-        大喜利の基準線。虫眼鏡・クリアボタン・インクリメンタルサーチ・キーボード操作・
-        ハイライトが入った、まっとうな実装です。
-      </p>
+      <p style={styles.lead}>大喜利の基準線。まっとうな実装です。</p>
 
       <label htmlFor="plain-search" className="plain-sr-only">
         食べ物を検索

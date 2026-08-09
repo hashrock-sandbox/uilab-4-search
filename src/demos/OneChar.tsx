@@ -27,10 +27,7 @@ export function OneChar() {
   return (
     <div style={styles.page}>
       <h2 style={styles.heading}>1文字しか入らない検索</h2>
-      <p style={styles.lead}>
-        打つと前の文字が消える。窓に居られるのは常にひとつだけ。最後に打った1文字を含む食べ物が
-        全部ヒットする、純度100%のあいまい検索です。
-      </p>
+      <p style={styles.lead}>打つと前の文字が消える、1文字しか入らない検索です。</p>
 
       <div
         ref={stageRef}

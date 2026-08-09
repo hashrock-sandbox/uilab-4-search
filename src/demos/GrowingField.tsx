@@ -42,10 +42,7 @@ export function GrowingField() {
   return (
     <div style={styles.page}>
       <h2 style={styles.heading}>育つ検索窓</h2>
-      <p style={styles.lead}>
-        打てば打つほど窓がぐんぐん育つ。文字数に比例して巨大化し、15文字で画面を覆い尽くす。
-        検索結果はちゃんと動くが、デカくなった窓に下へ押し出されていく。
-      </p>
+      <p style={styles.lead}>文字数に比例して窓が巨大化し、15文字で画面を覆い尽くします。</p>
 
       <label htmlFor="growing-search" className="grow-sr-only">
         食べ物を検索

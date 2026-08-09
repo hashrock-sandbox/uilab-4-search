@@ -78,8 +78,8 @@ export function GachaSearch() {
   return (
     <div style={styles.page}>
       <p style={styles.lead}>
-        探し物を1件ずつ引き当てる検索。関連度がレア度なので、
-        <strong style={{ color: 'var(--text-h)' }}>本当に欲しい結果がいちばん出ません</strong>。
+        1件ずつ引き当てる検索。関連度がレア度なので、
+        <strong style={{ color: 'var(--text-h)' }}>欲しい結果ほど出ません</strong>。
       </p>
 
       <div style={styles.controls}>

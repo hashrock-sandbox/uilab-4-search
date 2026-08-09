@@ -208,9 +208,7 @@ export function TrieSuggest() {
   return (
     <div style={styles.page}>
       <p style={styles.lead}>
-        検索サジェストの正体はツリーの走査です。英単語 {words.length.toLocaleString()} 語の
-        パトリシア木のうち、{FOLD_AT} 語を超える枝は件数つきで畳まれています。
-        畳まれた枝をクリックすると、そこまで入力したことになって掘り進みます。
+        検索サジェストの正体はツリー走査です。{FOLD_AT} 語を超える枝は畳まれ、クリックで掘り進めます。
       </p>
 
       <input

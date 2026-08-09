@@ -131,8 +131,8 @@ export function FishingSearch() {
     <div style={styles.page}>
       <h2 style={styles.heading}>釣り検索</h2>
       <p style={styles.lead}>
-        投げて、待つ。ヒキが来た一瞬に合わせないと逃げられる。
-        <strong style={{ color: 'var(--text-h)' }}>大物ほど関連度が高く、そして釣れにくい</strong>。
+        投げて待つ。ヒキの一瞬で合わせないと逃げる。
+        <strong style={{ color: 'var(--text-h)' }}>大物ほど関連度が高く、釣れにくい</strong>。
       </p>
 
       <input

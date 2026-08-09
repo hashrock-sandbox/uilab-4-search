@@ -142,9 +142,7 @@ export function BugHunt() {
 
   return (
     <div style={styles.page}>
-      <p style={styles.lead}>
-        検索を虫眼鏡本人にやらせます。茂みまで歩いて行って、何か持って帰ってきます。
-      </p>
+      <p style={styles.lead}>虫眼鏡が茂みまで歩いて、何か持って帰ってきます。</p>
 
       <div className="hunt-stage">
         <div className="hunt-field-row">

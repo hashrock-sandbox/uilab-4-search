@@ -102,10 +102,9 @@ export function ImeCandidates() {
   return (
     <div style={styles.page}>
       <p style={styles.lead}>
-        IMEの変換候補ウィンドウ、あれは検索結果です。全員が毎日何百回も検索しています。
-        ここでは検索結果を変換候補として返します。
+        変換候補ウィンドウの正体は検索結果です。
         <kbd style={styles.kbd}>Space</kbd> で次候補、数字キーで選択、
-        <kbd style={styles.kbd}>Tab</kbd> で一覧、<kbd style={styles.kbd}>Enter</kbd> で確定=検索。
+        <kbd style={styles.kbd}>Tab</kbd> で一覧、<kbd style={styles.kbd}>Enter</kbd> で確定。
       </p>
 
       <div className="imec-field">
