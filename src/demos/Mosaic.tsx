@@ -4,8 +4,8 @@ import './Mosaic.css'
 
 type Mode = 'all' | 'danger' | 'off'
 
-/** これを検索していると他人に知られてはならない */
-const DANGER = ['にんにく', 'あぶら', 'ビール', '夜', '発酵', 'ねばねば']
+/** これを検索していると他人に知られてはならない(あとから増やせる) */
+const DEFAULT_DANGER = ['にんにく', 'あぶら', 'ビール', '夜', '発酵', 'ねばねば']
 
 /** モザイク1ブロックの大きさ(CSS px) */
 const BLOCK = 6
@@ -17,12 +17,13 @@ const MODES: { id: Mode; label: string }[] = [
 ]
 
 /** text の各文字を隠すべきかどうか */
-function maskOf(text: string, mode: Mode): boolean[] {
+function maskOf(text: string, mode: Mode, danger: string[]): boolean[] {
   const chars = text.split('')
   if (mode === 'all') return chars.map(() => true)
   if (mode === 'off') return chars.map(() => false)
   const mask = chars.map(() => false)
-  for (const word of DANGER) {
+  for (const word of danger) {
+    if (!word) continue
     let at = text.indexOf(word)
     while (at !== -1) {
       for (let i = at; i < at + word.length; i++) mask[i] = true
@@ -99,11 +100,13 @@ function drawMosaicText(canvas: HTMLCanvasElement, text: string, mask: boolean[]
 function MosaicLabel({
   text,
   mode,
+  danger,
   peek,
   size = 15,
 }: {
   text: string
   mode: Mode
+  danger: string[]
   peek: boolean
   size?: number
 }) {
@@ -112,9 +115,9 @@ function MosaicLabel({
   useEffect(() => {
     const canvas = ref.current
     if (!canvas) return
-    const mask = peek ? text.split('').map(() => false) : maskOf(text, mode)
+    const mask = peek ? text.split('').map(() => false) : maskOf(text, mode, danger)
     drawMosaicText(canvas, text, mask, size)
-  }, [text, mode, peek, size])
+  }, [text, mode, danger, peek, size])
 
   if (text === '') return null
   return <canvas ref={ref} className="mosaic-canvas" role="img" aria-label={text} />
@@ -129,6 +132,9 @@ export function Mosaic() {
   const [composing, setComposing] = useState(false)
   const [focused, setFocused] = useState(false)
   const [history, setHistory] = useState<Entry[]>([])
+  const [danger, setDanger] = useState<string[]>(DEFAULT_DANGER)
+  const [draft, setDraft] = useState('')
+  const [showOptions, setShowOptions] = useState(false)
   const seq = useRef(0)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -136,7 +142,7 @@ export function Mosaic() {
   const open = query.trim() !== ''
 
   // 隠すべき文字がひとつでもあるときだけ入力を覆う(IME変換中は覆えない)
-  const covered = !composing && query !== '' && maskOf(query, mode).some(Boolean)
+  const covered = !composing && query !== '' && maskOf(query, mode, danger).some(Boolean)
   const dropdown = focused && history.length > 0
 
   const record = () => {
@@ -148,26 +154,15 @@ export function Mosaic() {
     ].slice(0, 8))
   }
 
+  const addDanger = () => {
+    const word = draft.trim()
+    if (!word) return
+    setDraft('')
+    setDanger((prev) => (prev.includes(word) ? prev : [...prev, word]))
+  }
+
   return (
     <div style={styles.page}>
-      <p style={styles.lead}>検索クエリを canvas で本当にピクセル化します。履歴も同様に隠れます。</p>
-
-      <div style={styles.modes}>
-        {MODES.map((m) => (
-          <button
-            key={m.id}
-            type="button"
-            className={`mosaic-mode ${mode === m.id ? 'is-active' : ''}`}
-            onClick={() => setMode(m.id)}
-          >
-            {m.label}
-          </button>
-        ))}
-      </div>
-      {mode === 'danger' && (
-        <p style={styles.dangerHint}>危険ワード: {DANGER.join('・')}</p>
-      )}
-
       <div className="mosaic-field">
         <div className="mosaic-box">
           <div className="mosaic-inputwrap">
@@ -191,7 +186,7 @@ export function Mosaic() {
             />
             {covered && (
               <div className="mosaic-overlay" aria-hidden="true">
-                <MosaicLabel text={query} mode={mode} peek={peek} size={17} />
+                <MosaicLabel text={query} mode={mode} danger={danger} peek={peek} size={17} />
               </div>
             )}
           </div>
@@ -223,7 +218,7 @@ export function Mosaic() {
                 className="mosaic-drop-row"
                 onClick={() => setQuery(entry.q)}
               >
-                <MosaicLabel text={entry.q} mode={mode} peek={peek} size={14} />
+                <MosaicLabel text={entry.q} mode={mode} danger={danger} peek={peek} size={14} />
                 <span style={styles.dropCount}>{entry.count} 件</span>
               </button>
             ))}
@@ -232,6 +227,93 @@ export function Mosaic() {
               <button type="button" className="mosaic-wipe" onClick={() => setHistory([])}>
                 🗑 証拠隠滅
               </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* 検索ボックスの下に畳んであるオプション */}
+      <div style={styles.options}>
+        <button
+          type="button"
+          className={`mosaic-disclose ${showOptions ? 'is-open' : ''}`}
+          aria-expanded={showOptions}
+          onClick={() => setShowOptions((v) => !v)}
+        >
+          <span className="mosaic-caret" aria-hidden="true">
+            ▸
+          </span>
+          オプション
+          <span style={styles.discloseNote}>
+            {MODES.find((m) => m.id === mode)?.label}
+            {mode === 'danger' && ` · ${danger.length} 語`}
+          </span>
+        </button>
+
+        {showOptions && (
+          <div className="mosaic-panel">
+            <div style={styles.modes}>
+              {MODES.map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  className={`mosaic-mode ${mode === m.id ? 'is-active' : ''}`}
+                  onClick={() => setMode(m.id)}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
+
+            <div style={styles.dangerBlock}>
+              <p style={styles.dangerLabel}>
+                危険ワード
+                {mode !== 'danger' && (
+                  <span style={styles.dangerOff}>(「危険ワードのみ」のとき使われます)</span>
+                )}
+              </p>
+              <div style={styles.chips}>
+                {danger.length === 0 && <span style={styles.dangerOff}>まだ一つもありません</span>}
+                {danger.map((word) => (
+                  <span key={word} className="mosaic-chip">
+                    {word}
+                    <button
+                      type="button"
+                      className="mosaic-chip-x"
+                      aria-label={`${word} を削除`}
+                      onClick={() => setDanger((prev) => prev.filter((w) => w !== word))}
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div style={styles.dangerAdd}>
+                <input
+                  className="mosaic-word-input"
+                  type="text"
+                  value={draft}
+                  maxLength={12}
+                  placeholder="隠したい言葉を追加"
+                  onChange={(e) => setDraft(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                      e.preventDefault()
+                      addDanger()
+                    }
+                  }}
+                />
+                <button type="button" className="mosaic-word-add" onClick={addDanger}>
+                  追加
+                </button>
+                <button
+                  type="button"
+                  className="mosaic-word-reset"
+                  onClick={() => setDanger(DEFAULT_DANGER)}
+                >
+                  初期値に戻す
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -249,12 +331,13 @@ export function Mosaic() {
               results.map((item) => (
                 <li key={item.id} className="mosaic-row">
                   <span style={styles.name}>
-                    <MosaicLabel text={item.name} mode={mode} peek={peek} />
+                    <MosaicLabel text={item.name} mode={mode} danger={danger} peek={peek} />
                   </span>
                   <span style={styles.meta}>
                     <MosaicLabel
                       text={`${item.kind} · ${item.tags.join(' / ')}`}
                       mode={mode}
+                      danger={danger}
                       peek={peek}
                       size={12}
                     />
@@ -276,9 +359,14 @@ const styles: Record<string, React.CSSProperties> = {
     padding: '40px 24px 80px',
     textAlign: 'left',
   },
-  lead: { margin: '0 0 20px', fontSize: 14, lineHeight: 1.7 },
-  modes: { display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' },
-  dangerHint: { margin: '-6px 0 14px', fontSize: 12, opacity: 0.65 },
+  options: { marginTop: 8 },
+  discloseNote: { marginLeft: 'auto', fontSize: 11, opacity: 0.55 },
+  modes: { display: 'flex', gap: 8, flexWrap: 'wrap' },
+  dangerBlock: { marginTop: 14 },
+  dangerLabel: { margin: '0 0 8px', fontSize: 12, opacity: 0.75 },
+  dangerOff: { marginLeft: 6, fontSize: 11, opacity: 0.6 },
+  chips: { display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' },
+  dangerAdd: { display: 'flex', gap: 6, marginTop: 10, alignItems: 'center' },
   status: { margin: '14px 2px 6px', fontSize: 13, opacity: 0.7 },
   list: {
     listStyle: 'none',

@@ -148,6 +148,113 @@
   color: #e5484d;
 }
 
+/* ---- 折りたたみオプション ---- */
+
+.mosaic-disclose {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  font: 500 12px var(--sans);
+  color: var(--text);
+  background: none;
+  border: none;
+  padding: 6px 4px;
+  cursor: pointer;
+}
+
+.mosaic-disclose:hover {
+  color: var(--text-h);
+}
+
+.mosaic-caret {
+  display: inline-block;
+  font-size: 10px;
+  opacity: 0.7;
+  transition: transform 0.15s ease;
+}
+
+.mosaic-disclose.is-open .mosaic-caret {
+  transform: rotate(90deg);
+}
+
+.mosaic-panel {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--code-bg);
+}
+
+.mosaic-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font: 400 12px var(--sans);
+  color: var(--text-h);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 3px 6px 3px 10px;
+}
+
+.mosaic-chip-x {
+  font: 400 13px var(--sans);
+  line-height: 1;
+  color: var(--text);
+  background: none;
+  border: none;
+  border-radius: 999px;
+  padding: 2px 4px;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.mosaic-chip-x:hover {
+  opacity: 1;
+  color: #e5484d;
+}
+
+.mosaic-word-input {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  font: 400 13px var(--sans);
+  color: var(--text-h);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+  outline: none;
+}
+
+.mosaic-word-input:focus {
+  border-color: var(--accent-border);
+}
+
+.mosaic-word-add,
+.mosaic-word-reset {
+  flex: none;
+  font: 500 12px var(--sans);
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.mosaic-word-add:hover,
+.mosaic-word-reset:hover {
+  color: var(--text-h);
+}
+
+.mosaic-word-reset {
+  border-color: transparent;
+  background: none;
+  opacity: 0.65;
+  padding: 6px 4px;
+}
+
 /* ---- モード切替 ---- */
 
 .mosaic-mode {
