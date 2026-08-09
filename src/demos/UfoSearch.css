@@ -15,6 +15,41 @@
     #8ec96f 72%,
     #6faf52 100%
   );
+  transition: background 1.1s ease;
+}
+
+/* 襲来中は空が落ちる。色を変えるだけで一気に不穏になる */
+.ufo-stage.is-invaded {
+  background: linear-gradient(
+    180deg,
+    #1a1c3a 0%,
+    #3b4166 62%,
+    #6b6f4a 72%,
+    #3f5330 100%
+  );
+}
+
+/* 雲の底が緑に光る。ビームの出どころが空にもある感じ */
+.ufo-stage.is-invaded::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    120% 60% at 50% 0%,
+    rgba(150, 255, 130, 0.18),
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: ufo-sky-pulse 2.6s ease-in-out infinite alternate;
+}
+
+@keyframes ufo-sky-pulse {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -25,6 +60,16 @@
       #283058 72%,
       #1f4a24 72%,
       #143512 100%
+    );
+  }
+
+  .ufo-stage.is-invaded {
+    background: linear-gradient(
+      180deg,
+      #05060f 0%,
+      #131736 62%,
+      #2a3018 72%,
+      #101a0c 100%
     );
   }
 }
@@ -61,7 +106,7 @@
 
 .ufo-em {
   display: inline-block;
-  font-size: 28px;
+  font-size: 42px;
   line-height: 1;
 }
 
@@ -80,12 +125,22 @@
 
 .ufo-cry {
   position: absolute;
-  top: -16px;
-  font-size: 10px;
+  top: -22px;
+  font-size: 15px;
   color: #e5484d;
   font-weight: 700;
   white-space: nowrap;
+  text-shadow:
+    0 1px 0 #fff,
+    0 0 4px #fff;
   animation: ufo-cry-pop 0.4s ease-out infinite alternate;
+}
+
+/* 吸い上げ中の断末魔。絵文字の拡大に負けないよう一段大きく */
+.ufo-cry.is-abduct {
+  top: -30px;
+  font-size: 20px;
+  animation-duration: 0.22s;
 }
 
 @keyframes ufo-cry-pop {
@@ -99,35 +154,28 @@
 
 /* ---- UFO とビーム ---- */
 
+/* 揺れは JS 側(glide の drift と tilt)で作るので、CSS では位置を動かさない */
 .ufo-ship {
   position: absolute;
-  left: -24px;
-  top: -22px;
-  z-index: 3;
-  font-size: 46px;
+  left: -35px;
+  top: -33px;
+  /* 住民の z-index は y に応じて増えるので、UFO は常にその上へ */
+  z-index: 9999;
+  font-size: 69px;
   line-height: 1;
   pointer-events: none;
-  animation: ufo-bob 1.6s ease-in-out infinite alternate;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.35));
 }
 
 .ufo-ship.is-beaming {
-  filter: drop-shadow(0 6px 16px rgba(190, 255, 140, 0.85));
-}
-
-@keyframes ufo-bob {
-  from {
-    margin-top: 0;
-  }
-  to {
-    margin-top: -5px;
-  }
+  filter: drop-shadow(0 6px 22px rgba(190, 255, 140, 0.9));
 }
 
 .ufo-beam {
   position: absolute;
   z-index: 1;
-  width: 120px;
-  margin-left: -60px;
+  width: 170px;
+  margin-left: -85px;
   clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
   background: linear-gradient(rgba(196, 255, 150, 0.6), rgba(196, 255, 150, 0.12));
   pointer-events: none;
@@ -150,13 +198,23 @@
   left: 50%;
   top: 40%;
   transform: translate(-50%, -50%);
-  z-index: 10;
+  z-index: 10000;
   width: min(560px, calc(100% - 48px));
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
   text-align: center;
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+/* 襲来中は検索 UI ごと引っ込めて、牧場の惨事だけを見せる */
+.ufo-center.is-hidden {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.94);
+  pointer-events: none;
 }
 
 .ufo-box {
@@ -228,14 +286,22 @@
   color: var(--text-h);
 }
 
+/* 状況ラベル。一語だけなので中央下に小さく置く */
 .ufo-msg {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  z-index: 10000;
   margin: 0;
-  font-size: 13px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
   color: var(--text-h);
   background: color-mix(in srgb, var(--bg) 70%, transparent);
-  border-radius: 8px;
-  padding: 4px 12px;
+  border-radius: 999px;
+  padding: 3px 14px;
   backdrop-filter: blur(4px);
+  white-space: nowrap;
 }
 
 /* ---- 右上のコンパクト報告書 ---- */
@@ -244,7 +310,7 @@
   position: absolute;
   top: 14px;
   right: 14px;
-  z-index: 10;
+  z-index: 10000;
   width: 220px;
   padding: 12px 14px;
   border-radius: 12px;
@@ -257,8 +323,8 @@
 
 .ufo-report-head {
   display: flex;
-  justify-content: space-between;
   align-items: baseline;
+  gap: 8px;
   font-size: 13px;
   font-weight: 600;
   color: var(--text-h);
@@ -266,9 +332,33 @@
 }
 
 .ufo-report-total {
+  margin-left: auto;
   font-size: 12px;
   font-weight: 400;
   opacity: 0.75;
+}
+
+.ufo-report-clear {
+  flex: none;
+  align-self: center;
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.ufo-report-clear:hover {
+  color: var(--accent);
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
 }
 
 .ufo-report-list {
@@ -305,9 +395,9 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ufo-ship,
   .ufo-beam,
   .ufo-cry,
+  .ufo-stage.is-invaded::before,
   .ufo-critter.is-panic .ufo-em {
     animation: none;
   }
