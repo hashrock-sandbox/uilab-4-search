@@ -225,7 +225,7 @@ export function TrieSuggest() {
       <p style={styles.stats}>
         {walk.dead
           ? 'この枝の先には何もありません(行き止まり)'
-          : `生き残り ${aliveCount.toLocaleString()} 語`}
+          : `候補 ${aliveCount.toLocaleString()} 語`}
       </p>
 
       {view ? (
