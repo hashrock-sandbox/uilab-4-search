@@ -1,34 +1,33 @@
 import { Link } from 'react-router-dom'
 import { demos } from './registry'
+import './Home.css'
 
 export function Home() {
   return (
     <div style={styles.page}>
       <header style={styles.header}>
         <h1 style={styles.title}>検索UI大喜利</h1>
-        <p style={styles.lead}>
-          検索という行為をわざと壊してみる実験場。{' '}
-          {demos.filter((d) => d.Component).length} / {demos.length} 実装済み。
-        </p>
       </header>
 
       <ul style={styles.list}>
         {demos.map((demo) => {
           const body = (
             <>
-              <span style={styles.cardTitle}>{demo.title}</span>
-              <span style={styles.cardSummary}>{demo.summary}</span>
+              <span className="home-row-title" style={styles.rowTitle}>
+                {demo.title}
+              </span>
+              <span style={styles.rowSummary}>{demo.summary}</span>
             </>
           )
 
           return (
-            <li key={demo.id}>
+            <li key={demo.id} style={styles.row}>
               {demo.Component ? (
-                <Link to={`/${demo.id}`} style={{ ...styles.card, ...styles.cardLink }}>
+                <Link to={`/${demo.id}`} className="home-row-link" style={styles.rowLink}>
                   {body}
                 </Link>
               ) : (
-                <div style={{ ...styles.card, ...styles.cardTodo }}>
+                <div style={styles.rowTodo}>
                   {body}
                   <span style={styles.todoBadge}>未実装</span>
                 </div>
@@ -42,38 +41,39 @@ export function Home() {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  page: { maxWidth: 760, margin: '0 auto', padding: '48px 24px 96px' },
+  page: { maxWidth: 640, margin: '0 auto', padding: '48px 24px 96px', textAlign: 'left' },
   header: { marginBottom: 40 },
   title: { fontSize: 40, margin: '0 0 8px' },
-  lead: { margin: 0, fontSize: 16 },
   list: {
     listStyle: 'none',
     margin: 0,
     padding: 0,
-    display: 'grid',
-    gap: 10,
   },
-  card: {
+  row: {
+    borderBottom: '1px solid var(--border)',
+  },
+  rowLink: {
     display: 'flex',
     flexDirection: 'column',
     gap: 4,
-    padding: '16px 20px',
-    border: '1px solid var(--border)',
-    borderRadius: 12,
+    padding: '18px 0',
     textDecoration: 'none',
-    position: 'relative',
+    color: 'inherit',
   },
-  cardLink: { color: 'inherit', background: 'var(--accent-bg)', borderColor: 'var(--accent-border)' },
-  cardTodo: { opacity: 0.55 },
-  cardTitle: { fontSize: 18, color: 'var(--text-h)', fontWeight: 500 },
-  cardSummary: { fontSize: 14, lineHeight: 1.5 },
+  rowTodo: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 4,
+    padding: '18px 0',
+    position: 'relative',
+    opacity: 0.5,
+  },
+  rowTitle: { fontSize: 17, color: 'var(--text-h)', fontWeight: 500 },
+  rowSummary: { fontSize: 14, lineHeight: 1.5 },
   todoBadge: {
     position: 'absolute',
-    top: 16,
-    right: 20,
+    top: 18,
+    right: 0,
     fontSize: 12,
-    padding: '2px 8px',
-    borderRadius: 999,
-    border: '1px solid var(--border)',
   },
 }
