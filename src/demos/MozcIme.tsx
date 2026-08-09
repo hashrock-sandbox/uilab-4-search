@@ -27,16 +27,27 @@ type Status = 'loading' | 'downloading' | 'ready' | 'error'
 
 const BASE = import.meta.env.BASE_URL
 
+// 2 回目以降は「タグがあるか」ではなく最初の Promise を返す。
+// タグの存在で resolve すると、StrictMode の二重マウントで
+// まだ実行されていない script を「読み込み済み」と誤認して
+// window.KeymapEngine が undefined のまま先へ進んでしまう。
+const scriptCache = new Map<string, Promise<void>>()
+
 function loadScript(src: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const existing = document.querySelector(`script[src="${src}"]`)
-    if (existing) return resolve()
+  const cached = scriptCache.get(src)
+  if (cached) return cached
+  const p = new Promise<void>((resolve, reject) => {
     const s = document.createElement('script')
     s.src = src
     s.onload = () => resolve()
-    s.onerror = () => reject(new Error(`script load failed: ${src}`))
+    s.onerror = () => {
+      scriptCache.delete(src) // 失敗は握らない（リロードで再試行できる）
+      reject(new Error(`script load failed: ${src}`))
+    }
     document.head.appendChild(s)
   })
+  scriptCache.set(src, p)
+  return p
 }
 
 export function MozcIme() {
@@ -60,11 +71,14 @@ export function MozcIme() {
 
       worker = new Worker(`${BASE}vendor/hechima/hechima-worker.js`)
       // worker のロード失敗は connectWorker からは見えない（EMBEDDING.md の注意）
-      worker.addEventListener('error', () => setStatus('error'))
+      worker.addEventListener('error', () => {
+        if (!dead) setStatus('error')
+      })
 
       const conn = Hechima.connectWorker(worker, {
         maxCands: 24,
         onProgress: (loaded: number, total: number) => {
+          if (dead) return // 破棄済みセッションの進捗で ready を巻き戻さない
           setStatus('downloading')
           setProgress({ loaded, total })
         },
@@ -81,10 +95,9 @@ export function MozcIme() {
           setSegments([])
           setCommitted((prev) => prev + text)
         },
-        // 未確定が空のときの BS は確定済みクエリを削る
-        hostKey: (name: string) => {
-          if (name === 'Backspace') setCommitted((prev) => prev.slice(0, -1))
-        },
+        // cb.hostKey は内蔵ローマ字経路専用。engine（配列）を挿しているこのデモでは
+        // 呼ばれず、未確定が空のときの編集キーは feed() が false を返してホストに戻る。
+        // → 確定済みクエリの編集は onKeyDown 側で受け持つ。
         ...conn.callbacks(),
       })
 
@@ -117,7 +130,15 @@ export function MozcIme() {
     const fep = fepRef.current
     if (!fep) return
     if (e.nativeEvent.isComposing) return // OS の IME が挟まったら触らない
-    if (fep.feed(e.nativeEvent)) e.preventDefault()
+    if (fep.feed(e.nativeEvent)) {
+      e.preventDefault()
+      return
+    }
+    // 飲まれなかった編集キー = 未確定が空。確定済みクエリを削る
+    if (e.key === 'Backspace') {
+      e.preventDefault()
+      setCommitted((prev) => Array.from(prev).slice(0, -1).join('')) // 🍜 も 1 文字
+    }
   }
   const onKeyUp = (e: React.KeyboardEvent) => {
     fepRef.current?.feedUp(e.nativeEvent)
@@ -159,7 +180,7 @@ export function MozcIme() {
         onKeyUp={onKeyUp}
       >
         {committed === '' && segments.length === 0 && (
-          <span className="mozc-placeholder">クリックして raamen と打って Space</span>
+          <span className="mozc-placeholder">クリックして ra-men と打って Space</span>
         )}
         <span className="mozc-committed">{committed}</span>
         {segments.map((seg, i) => (
