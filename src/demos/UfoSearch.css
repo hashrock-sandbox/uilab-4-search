@@ -15,11 +15,19 @@
     #8ec96f 72%,
     #6faf52 100%
   );
-  transition: background 1.1s ease;
 }
 
-/* 襲来中は空が落ちる。色を変えるだけで一気に不穏になる */
-.ufo-stage.is-invaded {
+/*
+ * 襲来中の暗い空。グラデーションは transition できないので、
+ * 暗い面を重ねて opacity だけを動かす(これならちゃんと繋がる)
+ */
+.ufo-stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
   background: linear-gradient(
     180deg,
     #1a1c3a 0%,
@@ -27,25 +35,37 @@
     #6b6f4a 72%,
     #3f5330 100%
   );
+  transition: opacity 1.2s ease;
+}
+
+.ufo-stage.is-invaded::before {
+  opacity: 1;
 }
 
 /* 雲の底が緑に光る。ビームの出どころが空にもある感じ */
-.ufo-stage.is-invaded::before {
+.ufo-stage::after {
   content: '';
   position: absolute;
   inset: 0;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
   background: radial-gradient(
     120% 60% at 50% 0%,
-    rgba(150, 255, 130, 0.18),
+    rgba(150, 255, 130, 0.22),
     transparent 70%
   );
-  pointer-events: none;
-  animation: ufo-sky-pulse 2.6s ease-in-out infinite alternate;
+  transition: opacity 1.2s ease;
+}
+
+.ufo-stage.is-invaded::after {
+  opacity: 1;
+  animation: ufo-sky-pulse 2.6s ease-in-out 1.2s infinite alternate;
 }
 
 @keyframes ufo-sky-pulse {
   from {
-    opacity: 0.5;
+    opacity: 0.45;
   }
   to {
     opacity: 1;
@@ -63,7 +83,7 @@
     );
   }
 
-  .ufo-stage.is-invaded {
+  .ufo-stage::before {
     background: linear-gradient(
       180deg,
       #05060f 0%,
@@ -284,24 +304,6 @@
   border-radius: 5px;
   background: color-mix(in srgb, var(--code-bg) 85%, transparent);
   color: var(--text-h);
-}
-
-/* 状況ラベル。一語だけなので中央下に小さく置く */
-.ufo-msg {
-  position: absolute;
-  left: 50%;
-  bottom: 14px;
-  transform: translateX(-50%);
-  z-index: 10000;
-  margin: 0;
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  color: var(--text-h);
-  background: color-mix(in srgb, var(--bg) 70%, transparent);
-  border-radius: 999px;
-  padding: 3px 14px;
-  backdrop-filter: blur(4px);
-  white-space: nowrap;
 }
 
 /* ---- 右上のコンパクト報告書 ---- */
