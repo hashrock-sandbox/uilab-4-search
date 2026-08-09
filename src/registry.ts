@@ -8,6 +8,7 @@ import { ImeCandidates } from './demos/ImeCandidates'
 import { Lattice } from './demos/Lattice'
 import { Loupe } from './demos/Loupe'
 import { Mosaic } from './demos/Mosaic'
+import { MozcIme } from './demos/MozcIme'
 import { OneChar } from './demos/OneChar'
 import { PhysicsSearch } from './demos/PhysicsSearch'
 import { PlainSearch } from './demos/PlainSearch'
@@ -85,6 +86,12 @@ export const demos: Demo[] = [
     title: '変換候補ウィンドウ検索',
     summary: '検索結果がIMEの変換候補として出てくる。スペースで次候補、確定した瞬間それは検索になる',
     Component: ImeCandidates,
+  },
+  {
+    id: 'mozc',
+    title: 'IME内蔵検索',
+    summary: 'OSのIMEを使わせない。窓の中に本物のMozc(WebAssembly)が住んでいて、ページ内で文節変換が完結する',
+    Component: MozcIme,
   },
   {
     id: 'lattice',
