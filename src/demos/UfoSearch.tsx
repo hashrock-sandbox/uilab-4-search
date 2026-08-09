@@ -4,6 +4,8 @@ import './UfoSearch.css'
 
 /** 野に放たれる住民の数 */
 const POP = 18
+/** 住民どうしの最低間隔(px)。近すぎる配置を避ける */
+const MIN_GAP = 34
 /** 中央のヒットチップに部分表示する単語の数 */
 const SAMPLE = 8
 /** 右上の報告書に見せる直近の回収数 */
@@ -28,6 +30,8 @@ type Critter = {
   flipAt: number
   /** ビームに選ばれた個体が背負わされる検索結果 */
   word: string | null
+  /** 足元の縦位置の個体差(px)。同じ地面でも重なって見えにくくする */
+  yJitter: number
 }
 
 type UfoPhase = 'off' | 'move' | 'beam' | 'sweep' | 'leave'
@@ -53,20 +57,37 @@ export function UfoSearch() {
   const dims = useRef({ w: 0, h: 0 })
 
   const critterSeq = useRef(0)
-  const spawnOne = (w: number): Critter => {
+  /** 既存の住民から MIN_GAP 以上離れた x を探す(見つからなければ一番マシな候補で妥協) */
+  const pickX = (w: number, existing: Critter[]) => {
+    const span = Math.max(60, w - 60)
+    let best = 30 + Math.random() * span
+    let bestGap = -Infinity
+    for (let i = 0; i < 8; i++) {
+      const cand = 30 + Math.random() * span
+      const gap = existing.length === 0 ? Infinity : Math.min(...existing.map((c) => Math.abs(c.x - cand)))
+      if (gap >= MIN_GAP) return cand
+      if (gap > bestGap) {
+        bestGap = gap
+        best = cand
+      }
+    }
+    return best
+  }
+  const spawnOne = (w: number, existing: Critter[] = critters.current): Critter => {
     const cow = Math.random() < 0.5
     const id = critterSeq.current++
     return {
       id,
       emoji: cow ? COWS[id % COWS.length] : HUMANS[id % HUMANS.length],
       species: cow ? '牛' : '人間',
-      x: 30 + Math.random() * Math.max(60, w - 60),
+      x: pickX(w, existing),
       dir: Math.random() < 0.5 ? 1 : -1,
       speed: 12 + Math.random() * 20,
       state: 'wander',
       lift: 0,
       flipAt: 0,
       word: null,
+      yJitter: Math.random() * 10,
     }
   }
 
@@ -109,9 +130,11 @@ export function UfoSearch() {
       const { w, h } = dims.current
       const u = ufo.current
 
-      // 実寸が分かってから住民を放つ
+      // 実寸が分かってから住民を放つ(重ならないよう1体ずつ既存分を見ながら配置)
       if (critters.current.length === 0 && w > 0) {
-        critters.current = Array.from({ length: POP }, () => spawnOne(w))
+        const seeded: Critter[] = []
+        for (let i = 0; i < POP; i++) seeded.push(spawnOne(w, seeded))
+        critters.current = seeded
       }
       const all = critters.current
       const cruise = Math.max(90, h * 0.26)
@@ -136,7 +159,29 @@ export function UfoSearch() {
             c.x = w - 22
             c.dir = -1
           }
-        } else if (c.state === 'lifting') {
+        }
+      }
+
+      // 歩いているうちに近づきすぎたら間隔を詰め直す(x でソートして隣接だけ見れば
+      // 3 体以上の連なりも 1 パスで解決できる。ペアごとの押し合いだと連鎖に負ける)
+      {
+        const movers = all.filter((c) => c.state === 'wander' || c.state === 'panic')
+        movers.sort((a, b) => a.x - b.x)
+        for (let i = 1; i < movers.length; i++) {
+          const prev = movers[i - 1]
+          if (movers[i].x - prev.x < MIN_GAP) movers[i].x = prev.x + MIN_GAP
+        }
+        for (let i = movers.length - 1; i >= 0; i--) {
+          if (movers[i].x > w - 22) movers[i].x = w - 22
+          if (i > 0 && movers[i].x - movers[i - 1].x < MIN_GAP) {
+            movers[i - 1].x = movers[i].x - MIN_GAP
+          }
+        }
+        for (const c of movers) c.x = Math.max(c.x, 22)
+      }
+
+      for (const c of all) {
+        if (c.state === 'lifting') {
           c.lift += dt / 1.1
           if (c.lift >= 1) {
             c.state = 'gone'
@@ -189,7 +234,7 @@ export function UfoSearch() {
           // 生き残りは日常へ、減ったぶんは新しい住民が何食わぬ顔で補充される
           const survivors = all.filter((c) => c.state !== 'gone')
           for (const c of survivors) c.state = 'wander'
-          while (survivors.length < POP) survivors.push(spawnOne(w))
+          while (survivors.length < POP) survivors.push(spawnOne(w, survivors))
           critters.current = survivors
           setMessage('作戦終了。住民の数はなぜか元に戻っています。誰も何も覚えていません。')
         }
@@ -243,13 +288,6 @@ export function UfoSearch() {
 
   return (
     <div ref={stageRef} className="ufo-stage">
-      {/* 草むら(ステージ幅に対する割合で配置) */}
-      {['8%', '24%', '43%', '61%', '78%', '93%'].map((left, i) => (
-        <span key={left} className="ufo-grass" style={{ left }}>
-          {i % 2 === 0 ? '🌾' : '🌿'}
-        </span>
-      ))}
-
       {u.phase === 'beam' && (
         <div
           className="ufo-beam"
@@ -259,7 +297,8 @@ export function UfoSearch() {
 
       {critters.current.map((c) => {
         if (c.state === 'gone') return null
-        const footY = c.state === 'lifting' ? ground - c.lift * (ground - (u.y + 26)) : ground
+        const footY =
+          c.state === 'lifting' ? ground - c.lift * (ground - (u.y + 26)) : ground - c.yJitter
         const spin =
           c.state === 'lifting'
             ? ` rotate(${(c.lift * 560).toFixed(1)}deg) scale(${(1 - c.lift * 0.5).toFixed(3)})`

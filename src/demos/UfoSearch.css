@@ -29,14 +29,6 @@
   }
 }
 
-.ufo-grass {
-  position: absolute;
-  bottom: 10px;
-  font-size: 20px;
-  opacity: 0.8;
-  pointer-events: none;
-}
-
 /* ---- 住民 ---- */
 
 .ufo-critter {
