@@ -1,0 +1,242 @@
+.shout-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.shout-field:focus-within {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+/* 段が上がるほど枠がだんだん強調される（叫んでいる感） */
+.shout-field[data-level='3'] {
+  border-color: var(--accent-border);
+}
+.shout-field[data-level='4'] {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-bg);
+}
+
+.shout-icon {
+  flex: none;
+  color: var(--text);
+  opacity: 0.65;
+}
+
+.shout-icon-on {
+  color: var(--accent);
+  opacity: 1;
+  animation: shout-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes shout-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+.shout-input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-h);
+  font: inherit;
+  font-size: 16px;
+}
+
+.shout-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.shout-input::placeholder {
+  color: var(--text);
+  opacity: 0.6;
+}
+
+/* --- 音量メーター --- */
+.shout-meter {
+  margin-top: 16px;
+}
+
+.shout-meter-track {
+  position: relative;
+  height: 12px;
+  border-radius: 999px;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.shout-meter-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  background: var(--accent-border);
+  transition:
+    width 0.08s linear,
+    background 0.2s ease;
+}
+
+.shout-meter-fill[data-level='4'] {
+  background: var(--accent);
+}
+
+.shout-meter-tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+  transform: translateX(-0.5px);
+}
+
+.shout-meter-legend {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  gap: 4px;
+}
+
+.shout-meter-step {
+  font-size: 10px;
+  opacity: 0.55;
+  white-space: nowrap;
+  transition: opacity 0.15s ease;
+}
+
+.shout-meter-step[data-active='true'] {
+  opacity: 1;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* --- コントロール / フォールバック --- */
+.shout-control {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shout-btn {
+  align-self: flex-start;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.shout-btn:hover:not(:disabled) {
+  background: var(--code-bg);
+}
+
+.shout-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.shout-btn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.shout-btn-primary {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+  color: var(--text-h);
+}
+
+.shout-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.shout-slider-label {
+  flex: none;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.shout-slider {
+  flex: 1;
+  min-width: 0;
+  accent-color: var(--accent);
+}
+
+.shout-hint {
+  margin: 0;
+  font-size: 12px;
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+/* --- 結果 --- */
+.shout-results {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.shout-option {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.shout-option:hover {
+  background: var(--code-bg);
+}
+
+.shout-empty {
+  padding: 10px 12px;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.shout-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shout-icon-on {
+    animation: none;
+  }
+}

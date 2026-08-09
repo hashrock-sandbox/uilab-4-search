@@ -1,0 +1,230 @@
+.fish-pond {
+  position: relative;
+  height: 240px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--code-bg) 0%, var(--accent-bg) 100%);
+  cursor: pointer;
+  user-select: none;
+}
+
+.fish-pond.is-idle {
+  cursor: default;
+}
+
+/* さざなみ */
+.fish-pond::before,
+.fish-pond::after {
+  content: '';
+  position: absolute;
+  left: -20%;
+  right: -20%;
+  height: 2px;
+  background: var(--accent-border);
+  opacity: 0.35;
+  border-radius: 999px;
+}
+
+.fish-pond::before {
+  top: 62%;
+  animation: fish-ripple 4.5s ease-in-out infinite;
+}
+
+.fish-pond::after {
+  top: 78%;
+  animation: fish-ripple 6s ease-in-out infinite reverse;
+}
+
+@keyframes fish-ripple {
+  0%,
+  100% {
+    transform: translateX(-6%) scaleY(1);
+  }
+  50% {
+    transform: translateX(6%) scaleY(1.8);
+  }
+}
+
+/* ウキ */
+.fish-float {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  font-size: 30px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  transition: left 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2), top 0.3s ease-out;
+  z-index: 2;
+  will-change: transform;
+}
+
+.fish-float.is-hidden {
+  opacity: 0;
+  top: 12%;
+}
+
+.fish-float.is-waiting {
+  animation: fish-bob 2.4s ease-in-out infinite;
+}
+
+@keyframes fish-bob {
+  0%,
+  100% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, -38%);
+  }
+}
+
+.fish-float.is-biting {
+  animation: fish-twitch 0.14s ease-in-out infinite;
+}
+
+@keyframes fish-twitch {
+  0% {
+    transform: translate(-50%, -50%) rotate(-9deg);
+  }
+  50% {
+    transform: translate(-50%, -28%) rotate(9deg);
+  }
+  100% {
+    transform: translate(-50%, -52%) rotate(-9deg);
+  }
+}
+
+/* ！ マーク */
+.fish-alert {
+  position: absolute;
+  top: 26%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-h);
+  z-index: 3;
+  animation: fish-alert-pop 0.24s cubic-bezier(0.2, 1.6, 0.4, 1) backwards;
+  pointer-events: none;
+}
+
+@keyframes fish-alert-pop {
+  from {
+    transform: translate(-50%, 8px) scale(0.4);
+    opacity: 0;
+  }
+  to {
+    transform: translate(-50%, 0) scale(1);
+    opacity: 1;
+  }
+}
+
+.fish-pond-label {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text);
+  opacity: 0.75;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.fish-button {
+  padding: 12px 22px;
+  border: 1px solid var(--accent-border);
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.1s ease-out;
+}
+
+.fish-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.fish-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.fish-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.fish-button.is-strike {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+  animation: fish-strike-glow 0.7s ease-in-out infinite;
+}
+
+@keyframes fish-strike-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--accent-border);
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+/* 釣果カード */
+.fish-catch {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 6px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--code-bg);
+  overflow: hidden;
+  animation: fish-reel-in 0.45s cubic-bezier(0.2, 1.4, 0.4, 1) backwards;
+}
+
+@keyframes fish-reel-in {
+  from {
+    transform: translateY(-14px) scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.fish-catch.is-big {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+  box-shadow: 0 0 18px var(--shadow);
+}
+
+.fish-catch.is-big::after {
+  content: '';
+  position: absolute;
+  inset: -60% -120%;
+  background: linear-gradient(
+    75deg,
+    transparent 42%,
+    var(--accent-border) 50%,
+    transparent 58%
+  );
+  animation: fish-shine 1.3s ease-out 0.2s;
+  pointer-events: none;
+}
+
+@keyframes fish-shine {
+  from {
+    transform: translateX(-60%);
+  }
+  to {
+    transform: translateX(60%);
+  }
+}

@@ -1,0 +1,209 @@
+/* 銭湯の暖簾 */
+.sento-noren {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  margin-bottom: -1px;
+  z-index: 2;
+}
+
+.sento-noren-panel {
+  width: 46px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  background: var(--accent-bg);
+  border: 1px solid var(--accent-border);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  color: var(--accent);
+  font-size: 18px;
+  line-height: 1;
+  box-shadow: var(--shadow);
+}
+
+/* 湯船 */
+.sento-bath {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background:
+    repeating-linear-gradient(
+      -18deg,
+      var(--accent-bg) 0 2px,
+      transparent 2px 26px
+    ),
+    var(--code-bg);
+  box-shadow: inset 0 2px 10px var(--accent-bg);
+  touch-action: manipulation;
+}
+
+/* お湯にただよう他人のクエリ（桶） */
+.sento-bubble {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 220px;
+  padding: 7px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  will-change: transform;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.05s linear;
+}
+
+.sento-bubble:hover {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.sento-bubble:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.sento-bubble-mark {
+  flex: none;
+  font-size: 14px;
+  line-height: 1;
+}
+
+/* 自分が放流したクエリは色味を変える */
+.sento-bubble.is-mine {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.sento-guest {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+/* 湯気 */
+.sento-steam {
+  position: absolute;
+  bottom: -18px;
+  font-size: 20px;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  animation: sento-rise linear forwards;
+}
+
+@keyframes sento-rise {
+  0% {
+    transform: translateY(0) scale(0.7);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-220px) scale(1.4);
+    opacity: 0;
+  }
+}
+
+.sento-hint {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 2px 0;
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.sento-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.sento-field:focus-within {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.sento-input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-h);
+  font: inherit;
+  font-size: 16px;
+}
+
+.sento-input::placeholder {
+  color: var(--text);
+  opacity: 0.6;
+}
+
+.sento-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.sento-option {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.sento-option + .sento-option {
+  border-top: 1px solid var(--border);
+}
+
+.sento-option mark {
+  background: rgba(245, 200, 60, 0.45);
+  color: inherit;
+  border-radius: 2px;
+}
+
+.sento-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sento-steam {
+    display: none;
+  }
+  .sento-bubble {
+    transition: none;
+  }
+}

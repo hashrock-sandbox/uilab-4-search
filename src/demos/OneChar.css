@@ -1,0 +1,113 @@
+.onechar-stage {
+  display: grid;
+  place-items: center;
+  height: 220px;
+  margin: 8px 0 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  cursor: text;
+}
+
+.onechar-stage:focus-within {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+/* 画面外に置いた本物の入力。1文字だけ受け取る */
+.onechar-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.onechar-glyph {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 128px;
+  line-height: 1;
+  color: var(--text-h);
+  user-select: none;
+}
+
+/* 上書きされるたびに一瞬跳ねる */
+.onechar-glyph.is-hit {
+  animation: onechar-pop 0.28s ease;
+}
+
+@keyframes onechar-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.18);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.onechar-empty {
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--text);
+  opacity: 0.55;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.onechar-caret {
+  display: inline-block;
+  width: 4px;
+  height: 96px;
+  margin-left: 6px;
+  vertical-align: middle;
+  background: var(--accent);
+  border-radius: 2px;
+  animation: onechar-blink 1s steps(2, start) infinite;
+}
+
+@keyframes onechar-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.onechar-list {
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.onechar-option {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 8px;
+}
+
+.onechar-option:hover {
+  background: var(--code-bg);
+}
+
+.onechar-option mark {
+  background: rgba(245, 200, 60, 0.45);
+  color: inherit;
+  border-radius: 2px;
+}

@@ -1,0 +1,122 @@
+/* 機能しない検索窓。押すと諭される */
+.wait-fake-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  background: var(--code-bg);
+  color: var(--text);
+  font: inherit;
+  text-align: left;
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+.wait-fake-icon {
+  font-size: 15px;
+  opacity: 0.7;
+}
+
+.wait-fake-placeholder {
+  font-size: 15px;
+  opacity: 0.7;
+}
+
+.wait-nudge {
+  margin: 10px 2px 0;
+  font-size: 13px;
+  color: var(--accent);
+}
+
+/* 探し物が歩いてくる道 */
+.wait-road {
+  position: relative;
+  height: 120px;
+  margin-top: 18px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(180deg, var(--bg), var(--code-bg));
+  border: 1px solid var(--border);
+}
+
+.wait-horizon {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 46%;
+  border-top: 1px dashed var(--border);
+}
+
+.wait-quiet {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  letter-spacing: 4px;
+  opacity: 0.4;
+}
+
+/* 遠く（小さく）から手前（大きく）へ歩いてくる */
+.wait-walker {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  font-size: 20px;
+  transform: translate(-50%, -50%) scale(0.4);
+  animation: wait-approach 2.6s ease-in forwards;
+}
+
+@keyframes wait-approach {
+  0% {
+    transform: translate(-50%, -50%) scale(0.35);
+    opacity: 0;
+    top: 42%;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, 20%) scale(1.6);
+    opacity: 1;
+    top: 78%;
+  }
+}
+
+.wait-arrived {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  animation: wait-settle 0.5s ease;
+}
+
+@keyframes wait-settle {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.wait-arrived-emoji {
+  font-size: 18px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wait-walker {
+    animation-duration: 0.01ms;
+  }
+  .wait-arrived {
+    animation: none;
+  }
+}

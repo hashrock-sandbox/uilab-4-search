@@ -1,0 +1,133 @@
+/* ビューポート中央に居座る「舞台」。ページの maxWidth を無視して育つ */
+.grow-stage {
+  position: relative;
+  left: 50%;
+  width: 96vw;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  margin: 8px 0 4px;
+}
+
+.grow-field {
+  display: flex;
+  align-items: center;
+  gap: calc(8px + var(--grow) * 20px);
+  width: 100%;
+  max-width: var(--grow-w);
+  padding: var(--grow-pad-y) var(--grow-pad-x);
+  border: 1px solid var(--border);
+  border-radius: calc(10px + var(--grow) * 18px);
+  background: var(--bg);
+  box-shadow: 0 var(--grow-lift) calc(var(--grow-lift) * 2) var(--shadow);
+  /* ここが見どころ。ヌルッと育つ */
+  transition:
+    max-width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    padding 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-radius 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    gap 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s ease,
+    border-color 0.15s ease;
+}
+
+.grow-field:focus-within {
+  border-color: var(--accent-border);
+}
+
+.grow-icon {
+  flex: none;
+  color: var(--text);
+  opacity: 0.65;
+  width: var(--grow-icon);
+  height: var(--grow-icon);
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.grow-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-h);
+  font-family: var(--sans);
+  font-weight: 700;
+  line-height: 1.1;
+  font-size: var(--grow-font);
+  transition: font-size 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.grow-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.grow-input::placeholder {
+  color: var(--text);
+  opacity: 0.5;
+}
+
+.grow-clear {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--grow-clear);
+  height: var(--grow-clear);
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.15s ease;
+}
+
+.grow-clear:hover {
+  background: var(--code-bg);
+  color: var(--text-h);
+}
+
+.grow-clear:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.grow-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* 巨大化した窓に下へ押し出される、控えめな検索結果 */
+.grow-results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.grow-chip {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--code-bg);
+  font-size: 13px;
+}
+
+.grow-chip small {
+  opacity: 0.6;
+  font-size: 11px;
+}

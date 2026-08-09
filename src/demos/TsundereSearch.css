@@ -1,0 +1,262 @@
+.tsun-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.tsun-field:focus-within {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.tsun-icon {
+  flex: none;
+  color: var(--text);
+  opacity: 0.65;
+}
+
+.tsun-input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-h);
+  font: inherit;
+  font-size: 16px;
+}
+
+.tsun-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.tsun-input::placeholder {
+  color: var(--text);
+  opacity: 0.6;
+}
+
+.tsun-go {
+  flex: none;
+  padding: 7px 14px;
+  border: 1px solid var(--accent-border);
+  border-radius: 8px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tsun-go:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* ---- 逆ギレ本体 ---- */
+
+.tsun-stage {
+  margin-top: 24px;
+  padding: 22px 20px 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.tsun-avatar {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 12px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--code-bg);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.tsun-avatar[data-phase='giveup'] {
+  border-color: var(--accent-border);
+  animation: tsun-shake 0.4s ease;
+}
+
+@keyframes tsun-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px) rotate(-3deg);
+  }
+  40% {
+    transform: translateX(5px) rotate(3deg);
+  }
+  60% {
+    transform: translateX(-4px) rotate(-2deg);
+  }
+  80% {
+    transform: translateX(4px) rotate(2deg);
+  }
+}
+
+.tsun-face {
+  font-size: 40px;
+  line-height: 1;
+  display: inline-block;
+  animation: tsun-pop 0.25s ease;
+}
+
+@keyframes tsun-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.tsun-mood {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 240px;
+  margin: 0 auto 16px;
+}
+
+.tsun-mood-label {
+  font-size: 11px;
+  opacity: 0.7;
+  white-space: nowrap;
+}
+
+.tsun-mood-track {
+  flex: 1;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--code-bg);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.tsun-mood-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.tsun-mood-fill[data-low='true'] {
+  background: #e0553f;
+}
+
+.tsun-say {
+  margin: 0 0 14px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-h);
+  font-weight: 600;
+}
+
+.tsun-say[data-tone='grumpy'],
+.tsun-say[data-tone='mad'] {
+  color: #d64a34;
+}
+
+.tsun-say[data-tone='happy'] {
+  color: var(--accent);
+}
+
+.tsun-answer {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  padding: 12px 22px;
+  margin: 0 auto 16px;
+  border: 1px solid var(--accent-border);
+  border-radius: 10px;
+  background: var(--accent-bg);
+}
+
+.tsun-answer[data-confirmed] {
+  animation: tsun-pop 0.3s ease;
+}
+
+.tsun-answer-name {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-h);
+}
+
+.tsun-answer-meta {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.tsun-sulk {
+  margin: 0 auto 16px;
+  font-size: 12px;
+  font-family: var(--mono);
+  opacity: 0.6;
+}
+
+.tsun-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.tsun-btn {
+  padding: 9px 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.tsun-btn:hover {
+  background: var(--code-bg);
+}
+
+.tsun-btn.primary {
+  border-color: var(--accent-border);
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.tsun-btn.ghost {
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.tsun-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.tsun-hint {
+  margin: 14px 0 0;
+  font-size: 12px;
+  opacity: 0.7;
+}

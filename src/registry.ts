@@ -1,15 +1,25 @@
 import type { ComponentType } from 'react'
+import { BinaryTournament } from './demos/BinaryTournament'
 import { BugHunt } from './demos/BugHunt'
+import { FishingSearch } from './demos/FishingSearch'
 import { GachaSearch } from './demos/GachaSearch'
+import { GrowingField } from './demos/GrowingField'
 import { ImeCandidates } from './demos/ImeCandidates'
 import { Lattice } from './demos/Lattice'
 import { Loupe } from './demos/Loupe'
 import { Mosaic } from './demos/Mosaic'
+import { OneChar } from './demos/OneChar'
+import { PhysicsSearch } from './demos/PhysicsSearch'
 import { PlainSearch } from './demos/PlainSearch'
 import { RunawaySearch } from './demos/RunawaySearch'
+import { SentoSearch } from './demos/SentoSearch'
+import { ShoutSearch } from './demos/ShoutSearch'
 import { SweatyField } from './demos/SweatyField'
+import { TasteAxes } from './demos/TasteAxes'
 import { TrieSuggest } from './demos/TrieSuggest'
+import { TsundereSearch } from './demos/TsundereSearch'
 import { UfoSearch } from './demos/UfoSearch'
+import { WaitSearch } from './demos/WaitSearch'
 
 export type Demo = {
   /** URL の /:id になる */
@@ -86,16 +96,19 @@ export const demos: Demo[] = [
     id: 'growing',
     title: '育つ検索窓',
     summary: '文字数に比例して窓が巨大化し、15文字で画面を覆い尽くす',
+    Component: GrowingField,
   },
   {
     id: 'onechar',
     title: '1文字しか入らない検索',
     summary: '打つと前の文字が消える。純度100%のあいまい検索',
+    Component: OneChar,
   },
   {
     id: 'shout',
     title: '叫ぶ検索',
     summary: 'マイク音量が大きいほど検索範囲が広がる。ヒソヒソ声だと完全一致',
+    Component: ShoutSearch,
   },
   {
     id: 'gacha',
@@ -107,36 +120,43 @@ export const demos: Demo[] = [
     id: 'fishing',
     title: '釣り検索',
     summary: '投げて待つ。ヒキのタイミングで引かないと逃げる。大物ほど関連度が高い',
+    Component: FishingSearch,
   },
   {
     id: 'physics',
     title: '物理演算検索',
     summary: '結果が降ってきて積まれる。関連度＝質量なので重いものが沈む',
+    Component: PhysicsSearch,
   },
   {
     id: 'akinator',
     title: '二択トーナメント',
     summary: '2択で勝ち上がったものが答え。大喜利なのに実用に化ける裏切り',
+    Component: BinaryTournament,
   },
   {
     id: 'taste',
     title: '味覚の3軸',
     summary: '甘い / 辛い / すっぱい の3軸で絞る',
+    Component: TasteAxes,
   },
   {
     id: 'sento',
     title: '検索の銭湯',
     summary: '他人のクエリがゆるく流れてくる公衆検索場',
+    Component: SentoSearch,
   },
   {
     id: 'tsundere',
     title: '逆ギレ検索',
     summary: 'まず1件だけ絶対の自信で出す。違うと言うと不機嫌になる',
+    Component: TsundereSearch,
   },
   {
     id: 'wait',
     title: '待つ検索',
     summary: '検索しない。じっと待つと探し物が向こうから来る',
+    Component: WaitSearch,
   },
 ]
 
