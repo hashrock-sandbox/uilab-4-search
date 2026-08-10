@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react'
 import { BinaryTournament } from './demos/BinaryTournament'
 import { BugHunt } from './demos/BugHunt'
+import { ClothingSpace } from './demos/ClothingSpace'
 import { FishingSearch } from './demos/FishingSearch'
 import { GachaSearch } from './demos/GachaSearch'
 import { GrowingField } from './demos/GrowingField'
@@ -141,6 +142,12 @@ export const demos: Demo[] = [
     title: '二択トーナメント',
     summary: '2択で勝ち上がったものが答え。大喜利なのに実用に化ける裏切り',
     Component: BinaryTournament,
+  },
+  {
+    id: 'clothing',
+    title: '試着室のカーソル',
+    summary: '空間に服が浮いていて、カーソルは人間。触れた服から順に着ていく',
+    Component: ClothingSpace,
   },
   {
     id: 'taste',
