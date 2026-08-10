@@ -1,0 +1,326 @@
+.ramen-page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 32px 20px 64px;
+  text-align: left;
+}
+
+.ramen-head h1 {
+  font-size: 32px;
+  margin: 0 0 8px;
+}
+
+.ramen-lead {
+  font-size: 15px;
+  line-height: 165%;
+}
+
+.ramen-lead code {
+  font-size: 13px;
+}
+
+.ramen-controls {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0 14px;
+  flex-wrap: wrap;
+}
+
+.ramen-field {
+  flex: 1 1 280px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+}
+
+.ramen-field:focus-within {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.ramen-field input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-h);
+  font: inherit;
+  font-size: 15px;
+  min-width: 0;
+}
+
+.ramen-clear {
+  border: none;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+.ramen-search {
+  border: 1px solid var(--accent-border);
+  background: var(--accent-bg);
+  color: var(--text-h);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.ramen-search:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ramen-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 820px) {
+  .ramen-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* --- 地図 --- */
+
+.ramen-map {
+  position: relative;
+  height: 520px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--code-bg);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.ramen-map:active {
+  cursor: grabbing;
+}
+
+.ramen-tile {
+  position: absolute;
+  width: 256px;
+  height: 256px;
+  pointer-events: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* 素の OSM タイルは眩しいので、暗いテーマでは少し落とす */
+  .ramen-tile {
+    filter: invert(0.9) hue-rotate(180deg) brightness(0.95) contrast(0.9);
+  }
+}
+
+/* --- ピン --- */
+
+.ramen-pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  display: grid;
+  justify-items: center;
+  gap: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.35;
+  filter: grayscale(1);
+  transition:
+    opacity 0.2s ease,
+    filter 0.2s ease;
+}
+
+.ramen-pin[data-hit] {
+  opacity: 1;
+  filter: none;
+}
+
+.ramen-bowl {
+  font-size: 22px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
+}
+
+.ramen-steam {
+  font-size: 13px;
+  line-height: 1;
+  color: #e6543c;
+  opacity: 0;
+}
+
+.ramen-pin[data-hit] .ramen-steam {
+  animation: ramen-steam 2.4s ease-in-out infinite;
+}
+
+@keyframes ramen-steam {
+  0% {
+    opacity: 0;
+    transform: translateY(4px) scale(0.8);
+  }
+  40% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-8px) scale(1.1);
+  }
+}
+
+.ramen-label {
+  display: none;
+  max-width: 160px;
+  margin-top: 2px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-h);
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ramen-pin[data-hit]:hover .ramen-label,
+.ramen-pin[data-selected] .ramen-label {
+  display: block;
+}
+
+.ramen-pin[data-selected] {
+  z-index: 2;
+}
+
+.ramen-pin[data-selected] .ramen-bowl {
+  transform: scale(1.35);
+}
+
+/* --- 地図上のオーバーレイ --- */
+
+.ramen-zoom {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.ramen-zoom button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  font: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.ramen-attr {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.75);
+  color: #333;
+  font-size: 11px;
+  border-top-left-radius: 6px;
+}
+
+.ramen-attr a {
+  color: #333;
+}
+
+.ramen-tilenote {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  max-width: 320px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* --- 一覧 --- */
+
+.ramen-side {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  max-height: 520px;
+  overflow: auto;
+}
+
+.ramen-status {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-h);
+  margin-bottom: 8px;
+}
+
+.ramen-note {
+  font-size: 13px;
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+.ramen-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ramen-row {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  border-top: 1px solid var(--border);
+  background: transparent;
+  padding: 10px 4px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.ramen-row:hover,
+.ramen-row[data-selected] {
+  background: var(--accent-bg);
+}
+
+.ramen-row-name {
+  font-size: 14px;
+  color: var(--text-h);
+}
+
+.ramen-row-meta {
+  font-size: 12px;
+  color: var(--text);
+}
+
+.ramen-fake {
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  font-size: 10px;
+  vertical-align: middle;
+}
