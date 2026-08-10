@@ -12,6 +12,7 @@ import { MozcIme } from './demos/MozcIme'
 import { OneChar } from './demos/OneChar'
 import { PhysicsSearch } from './demos/PhysicsSearch'
 import { PlainSearch } from './demos/PlainSearch'
+import { RamenMap } from './demos/RamenMap'
 import { RunawaySearch } from './demos/RunawaySearch'
 import { SentoSearch } from './demos/SentoSearch'
 import { ShoutSearch } from './demos/ShoutSearch'
@@ -158,6 +159,12 @@ export const demos: Demo[] = [
     title: '逆ギレ検索',
     summary: 'まず1件だけ絶対の自信で出す。違うと言うと不機嫌になる',
     Component: TsundereSearch,
+  },
+  {
+    id: 'ramen-map',
+    title: 'ラーメン検索（地図）',
+    summary: 'OpenStreetMap の実データを Overpass で引いて、地図の上に湯気の立つ店を並べる',
+    Component: RamenMap,
   },
   {
     id: 'wait',
