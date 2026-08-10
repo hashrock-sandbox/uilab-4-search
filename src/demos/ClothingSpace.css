@@ -1,0 +1,344 @@
+.cs-page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px 20px 72px;
+  text-align: left;
+}
+
+.cs-head {
+  margin-bottom: 16px;
+}
+
+.cs-title {
+  margin: 0 0 6px;
+}
+
+.cs-lead {
+  font-size: 14px;
+  opacity: 0.8;
+  margin: 0 0 14px;
+}
+
+/* --- 検索窓 --- */
+.cs-searchbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.cs-searchbar:focus-within {
+  border-color: var(--accent-border);
+}
+
+.cs-searchicon {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  opacity: 0.6;
+}
+
+.cs-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--text-h);
+  font: inherit;
+  font-size: 16px;
+}
+
+.cs-input::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.cs-count {
+  flex: none;
+  font-size: 12px;
+  font-family: var(--mono);
+  color: var(--text);
+  opacity: 0.8;
+}
+
+/* --- 服が浮いている空間 --- */
+.cs-stage {
+  position: relative;
+  height: 640px;
+  margin-top: 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 50% 0%, var(--accent-bg), transparent 60%),
+    var(--code-bg);
+  /* カーソルは人。ネイティブの矢印には消えてもらう */
+  cursor: none;
+  touch-action: none;
+}
+
+.cs-item {
+  position: absolute;
+  width: 96px;
+  margin: -48px 0 0 -48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  animation: cs-float 6s ease-in-out infinite;
+  transition:
+    opacity 0.35s ease,
+    filter 0.35s ease,
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes cs-float {
+  0%,
+  100% {
+    translate: 0 -6px;
+  }
+  50% {
+    translate: 0 6px;
+  }
+}
+
+.cs-item-svg {
+  width: 72px;
+  height: 72px;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.22));
+  pointer-events: none;
+}
+
+.cs-item-name {
+  font-size: 11px;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--text-h);
+  opacity: 0.75;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* 検索から外れた服は、遠くで薄くなって触れなくなる */
+.cs-dim {
+  opacity: 0.14;
+  filter: grayscale(1) blur(1px);
+  transform: scale(0.7);
+  pointer-events: none;
+}
+
+/* 着てしまった服は空間から消える */
+.cs-taken {
+  opacity: 0;
+  transform: scale(0.4);
+  pointer-events: none;
+}
+
+/* --- カーソルとしての人 --- */
+.cs-cursor {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 3;
+}
+
+.cs-cursor.cs-away {
+  opacity: 0;
+}
+
+.cs-person {
+  position: absolute;
+  /* 胸のあたりがカーソル位置に来るようにぶら下げる */
+  left: -62px;
+  top: -96px;
+  width: 124px;
+  height: 234px;
+  overflow: visible;
+}
+
+.cs-body {
+  fill: var(--cs-skin, #cbbfae);
+}
+
+.cs-shadow {
+  fill: rgba(0, 0, 0, 0.16);
+}
+
+.cs-walking .cs-legs {
+  animation: cs-step 0.36s linear infinite;
+  transform-origin: 60px 126px;
+}
+
+@keyframes cs-step {
+  0%,
+  100% {
+    transform: skewX(0deg);
+  }
+  25% {
+    transform: skewX(7deg);
+  }
+  75% {
+    transform: skewX(-7deg);
+  }
+}
+
+/* 着た瞬間だけ、パンと乗る */
+.cs-worn {
+  animation: cs-put-on 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-box: fill-box;
+}
+
+@keyframes cs-put-on {
+  from {
+    opacity: 0;
+    translate: 0 -14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+.cs-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 13px;
+  z-index: 4;
+}
+
+/* --- いま着ているもの --- */
+.cs-outfit {
+  margin-top: 20px;
+}
+
+.cs-outfit-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-h);
+  margin: 0 0 10px;
+}
+
+.cs-outfit-num {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.cs-outfit-empty {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.cs-chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.cs-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 6px 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg);
+  font-size: 13px;
+  color: var(--text-h);
+}
+
+.cs-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+}
+
+.cs-chip-slot {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.cs-off {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cs-off:hover {
+  background: var(--code-bg);
+  color: var(--text-h);
+}
+
+.cs-strip {
+  margin-top: 12px;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.cs-strip:hover {
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+
+@media (prefers-color-scheme: dark) {
+  .cs-page {
+    --cs-skin: #6d6a76;
+  }
+
+  .cs-shadow {
+    fill: rgba(0, 0, 0, 0.35);
+  }
+}
+
+@media (max-width: 720px) {
+  .cs-stage {
+    height: 520px;
+  }
+
+  .cs-item {
+    width: 76px;
+    margin: -38px 0 0 -38px;
+  }
+
+  .cs-item-svg {
+    width: 56px;
+    height: 56px;
+  }
+}
