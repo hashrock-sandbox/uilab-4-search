@@ -127,39 +127,118 @@
 
 /* --- ピン --- */
 
+/*
+ * 地図タイルは色も密度もこちらで制御できない。絵文字をそのまま置くと道路の
+ * 黄色と同化して輪郭が消えるので、白いバッジに載せてしっぽで地点を指させる。
+ * 「地図の一部」ではなく「地図の上に乗ったもの」に見せるのが狙い。
+ */
+
 .ramen-pin {
   position: absolute;
+  /* 下端（しっぽの先）が店の座標に来る */
   transform: translate(-50%, -100%);
-  display: grid;
-  justify-items: center;
-  gap: 0;
+  display: block;
   border: none;
   background: transparent;
-  padding: 0;
+  /* しっぽの高さを自分の高さに含める。これで translate(-50%,-100%) の
+     下端＝しっぽの先＝店の座標になる */
+  padding: 0 0 7px;
   cursor: pointer;
-  opacity: 0.35;
-  filter: grayscale(1);
-  transition:
-    opacity 0.2s ease,
-    filter 0.2s ease;
-}
-
-.ramen-pin[data-hit] {
-  opacity: 1;
-  filter: none;
+  line-height: 0;
+  transition: transform 0.15s ease;
 }
 
 .ramen-bowl {
-  font-size: 22px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid rgba(0, 0, 0, 0.45);
+  /* 白背景でも暗背景でも縁が立つよう、影は薄く広く */
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.35),
+    0 0 0 1px rgba(255, 255, 255, 0.9);
+  font-size: 16px;
   line-height: 1;
-  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.35));
 }
 
+/* しっぽ。バッジ下端から地点へ向かう三角 */
+.ramen-bowl::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin-left: -4px;
+  margin-top: -1px;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 7px solid rgba(0, 0, 0, 0.45);
+}
+
+/*
+ * 検索で外れた店。消さずに小さく沈める（地点は読めたまま、絞り込みの手応えは残す）。
+ * 55 軒ぶんの白丸が同じ大きさで並ぶとヒットが埋もれるので、差はサイズでも付ける。
+ */
+.ramen-pin:not([data-hit]) .ramen-bowl {
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(0, 0, 0, 0.18);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+  filter: grayscale(1);
+  opacity: 0.45;
+}
+
+/* 沈んだピンも、触れば普通に読める */
+.ramen-pin:not([data-hit]):hover .ramen-bowl {
+  opacity: 0.95;
+  filter: none;
+}
+
+.ramen-pin:not([data-hit]) .ramen-bowl::after {
+  border-top-color: rgba(0, 0, 0, 0.2);
+}
+
+.ramen-pin:hover {
+  transform: translate(-50%, -100%) scale(1.12);
+  z-index: 3;
+}
+
+.ramen-pin[data-selected] {
+  z-index: 4;
+}
+
+.ramen-pin[data-selected] .ramen-bowl {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    0 0 0 3px rgba(255, 255, 255, 0.95);
+  transform: scale(1.15);
+}
+
+.ramen-pin[data-selected] .ramen-bowl::after {
+  border-top-color: var(--accent);
+}
+
+/* 湯気は絶対配置でバッジの外へ。ピンの高さ＝アンカー位置を動かさない */
 .ramen-steam {
-  font-size: 13px;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -6px;
+  font-size: 12px;
   line-height: 1;
   color: #e6543c;
   opacity: 0;
+  pointer-events: none;
+  text-shadow: 0 0 3px #fff;
 }
 
 .ramen-pin[data-hit] .ramen-steam {
@@ -180,14 +259,20 @@
   }
 }
 
+/* ラベルも絶対配置。表示してもピンの位置がずれない */
 .ramen-label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
   display: none;
+  margin-top: 8px;
   max-width: 160px;
-  margin-top: 2px;
-  padding: 2px 6px;
+  padding: 3px 7px;
   border-radius: 6px;
   background: var(--bg);
   border: 1px solid var(--border);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
   color: var(--text-h);
   font-size: 12px;
   line-height: 1.3;
@@ -196,17 +281,32 @@
   text-overflow: ellipsis;
 }
 
-.ramen-pin[data-hit]:hover .ramen-label,
+.ramen-pin:hover .ramen-label,
 .ramen-pin[data-selected] .ramen-label {
   display: block;
 }
 
-.ramen-pin[data-selected] {
-  z-index: 2;
-}
 
-.ramen-pin[data-selected] .ramen-bowl {
-  transform: scale(1.35);
+@media (prefers-color-scheme: dark) {
+  /* タイルを反転させているので、黒い縁としっぽは暗い地図に沈む。明るい側へ寄せる */
+  .ramen-bowl {
+    border-color: rgba(0, 0, 0, 0.55);
+    box-shadow:
+      0 1px 4px rgba(0, 0, 0, 0.6),
+      0 0 0 2px rgba(255, 255, 255, 0.85);
+  }
+
+  .ramen-bowl::after {
+    border-top-color: rgba(255, 255, 255, 0.85);
+  }
+
+  .ramen-pin:not([data-hit]) .ramen-bowl {
+    opacity: 0.4;
+  }
+
+  .ramen-pin:not([data-hit]) .ramen-bowl::after {
+    border-top-color: rgba(255, 255, 255, 0.6);
+  }
 }
 
 /* --- 地図上のオーバーレイ --- */

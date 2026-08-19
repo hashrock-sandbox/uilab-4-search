@@ -5,6 +5,8 @@ import './RamenMap.css'
  * 地図で探すラーメン検索。
  * 地図タイルは OpenStreetMap、店データは Overpass API（OSM のクエリ API）から
  * その場で取ってくる。ライブラリは使わず、タイル並べとメルカトル投影を手で書いている。
+ *
+ * Overpass QL の書き方・作法は docs/overpass.md にまとめてある。
  */
 
 const TILE = 256
